@@ -6,17 +6,36 @@
 </div>
 <div class="row">
   <div class="col">
-    Character Name:
-    <div class="row" *ngFor="let s of Slots">
+    Character Name: <input type="text" [(ngModel)]="characterName" />
+    <br />
+    <div class="row" *ngFor="let s of slots">
       <div class="col">
-        {{s.levelName}}
+        {{s.lvlName}}
       </div>
       <div class="col">
-        {{s.maxLevels}}
+        <input type="number" style="width: 40px;" [(ngModel)]="s.maxSlots" />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <button
+          type="button"
+          title="Click to reset all of you Spell Slots for the day"
+          (click)="longRest(true)"
+        >
+          Long Rest
+        </button>
       </div>
     </div>
   </div>
   <div class="col">
     Slots
+    <div class="row" *ngFor="let s of slots">
+      <div class="slotRow">
+        <ng-container *ngFor="let l of s.slots">
+          <slot-tracker [slot]="s"></slot-tracker>
+        </ng-container>
+      </div>
+    </div>
   </div>
 </div>
