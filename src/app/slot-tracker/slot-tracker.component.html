@@ -1,3 +1,22 @@
-<div class="slot">
+<div
+  *ngIf="slot"
+  class="slot"
+  [ngClass]="{'used': slot.slotUsed}"
+  (click)="expendSpell()"
+  [cdkContextMenuTriggerFor]="context_menu"
+>
   <p>{{slot.spellLevel}}</p>
 </div>
+
+<ng-template #context_menu>
+  <div class="example-menu" cdkMenu>
+    <button
+      *ngIf="slot.slotUsed"
+      class="example-menu-item"
+      cdkMenuItem
+      (click)="recover()"
+    >
+      Recover
+    </button>
+  </div>
+</ng-template>

@@ -33,7 +33,7 @@
     <div class="row" *ngFor="let s of slots">
       <div class="slotRow">
         <ng-container *ngFor="let l of s.slots">
-          <slot-tracker [slot]="s"></slot-tracker>
+          <slot-tracker [slot]="l"></slot-tracker>
         </ng-container>
       </div>
     </div>

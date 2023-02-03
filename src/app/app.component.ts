@@ -91,7 +91,8 @@ export class AppComponent implements OnInit {
           var slot: SpellSlot = new SpellSlot();
           slot.spellLevel = s.spellLevel;
           slot.slotUsed = false;
-          s.slots.push(slot);
+          var t = Object.assign(slot);
+          s.slots.push(t);
         }
       });
       if (notify) alert("long rest achieved!");
