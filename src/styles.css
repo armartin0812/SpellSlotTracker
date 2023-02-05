@@ -5,6 +5,16 @@ body {
   font-family: sans-serif;
 }
 
+.row {
+  display: inline-grid;
+  grid-template-columns: auto auto auto;
+  width: 100%;
+}
+
+.col {
+  margin: 1px;
+}
+
 .cdk-overlay-container {
   position: fixed;
   z-index: 1000;

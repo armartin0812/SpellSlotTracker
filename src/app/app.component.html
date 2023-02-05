@@ -4,38 +4,42 @@
     Welcome to {{ title }}!
   </h1>
 </div>
-<div class="row">
+<div class="row" *ngIf="!editCharacterObj">
   <div class="col">
-    Character Name: <input type="text" [(ngModel)]="characterName" />
-    <br />
-    <div class="row" *ngFor="let s of slots">
-      <div class="col">
-        {{s.lvlName}}
-      </div>
-      <div class="col">
-        <input type="number" style="width: 40px;" [(ngModel)]="s.maxSlots" />
-      </div>
-    </div>
-    <div class="row">
-      <div class="col">
-        <button
-          type="button"
-          title="Click to reset all of you Spell Slots for the day"
-          (click)="longRest(true)"
-        >
-          Long Rest
-        </button>
-      </div>
-    </div>
+    Character:
+    <select [(ngModel)]="selectedCharacter">
+      <option *ngFor="let c of characters" [value]="c"
+        >{{ c.characterName }}</option
+      >
+    </select>
+    &nbsp;
+    <button
+      type="button"
+      title="Click to create a brand new Character"
+      (click)="createNewCharacter()"
+    >
+      Add New
+    </button>
   </div>
+</div>
+<div class="row" *ngIf="!editCharacterObj && selectedCharacter">
   <div class="col">
-    Slots
-    <div class="row" *ngFor="let s of slots">
-      <div class="slotRow">
-        <ng-container *ngFor="let l of s.slots">
-          <slot-tracker [slot]="l"></slot-tracker>
-        </ng-container>
-      </div>
-    </div>
+    <button
+      type="button"
+      title="Click to edit the details for this Character"
+      (click)="editCharacter(selectedCharacter)"
+    >
+      Edit
+    </button>
+    <br />
+    <character-sheet [character]="selectedCharacter"></character-sheet>
+  </div>
+</div>
+<div class="row" *ngIf="editCharacterObj">
+  <div class="col">
+    <character-editor
+      [(character)]="editCharacterObj"
+      (onSave)="saveCharacter($event)"
+    ></character-editor>
   </div>
 </div>

@@ -1,0 +1,48 @@
+<div class="row">
+  <div class="col">
+    Character Name: <input type="text" [(ngModel)]="character.characterName" />
+    <br />
+    Character Class:
+    <select [(ngModel)]="character.characterClass">
+      <option [value]="1">Barbarian</option>
+      <option [value]="2">Bard</option>
+      <option [value]="3">Cleric</option>
+      <option [value]="4">Druid</option>
+      <option [value]="5">Fighter</option>
+      <option [value]="6">Monk</option>
+      <option [value]="7">Paladin</option>
+      <option [value]="8">Ranger</option>
+      <option [value]="9">Rogue</option>
+      <option [value]="10">Sorcerer</option>
+      <option [value]="11">Warlock</option>
+      <option [value]="12">Wizard</option>
+    </select>
+    <br />
+    Character Level:
+    <input
+      type="number"
+      style="width: 40px;"
+      [(ngModel)]="character.characterLevel"
+    /><br />
+    <br />
+    <div class="row" *ngFor="let s of character.spells">
+      <div class="col">
+        {{s.lvlName}}
+      </div>
+      <div class="col">
+        <input type="number" style="width: 40px;" [(ngModel)]="s.maxSlots" />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <button
+          type="button"
+          title="Click to save this character and return to the Character Screen"
+          (click)="save()"
+        >
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
