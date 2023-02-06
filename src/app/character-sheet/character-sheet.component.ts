@@ -1,5 +1,12 @@
-import { Component, Input, OnChanges, SimpleChanges } from "@angular/core";
+import {
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnChanges,
+  SimpleChanges
+} from "@angular/core";
 import { Character } from "../../assets/models";
+import { longRest } from "../../assets/functions";
 
 @Component({
   selector: "character-sheet",
@@ -9,20 +16,18 @@ import { Character } from "../../assets/models";
 export class CharacterSheetComponent implements OnChanges {
   @Input() character: Character;
 
+  constructor(private _cdr: ChangeDetectorRef) {}
+
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.Character) {
-      this.initializeSlots(false);
+    if (changes.character) {
+      longRest(this.character);
+      this._cdr.detectChanges();
     }
   }
 
-  initializeSlots(notify: boolean) {
-    this.character.initializeSpellSlots();
-
-    this.longRest(notify);
-  }
-
   longRest(notify: boolean) {
-    this.character.longRest();
+    longRest(this.character);
+    this._cdr.detectChanges();
     if (notify) alert("long rest achieved!");
   }
 }

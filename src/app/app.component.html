@@ -7,10 +7,12 @@
 <div class="row" *ngIf="!editCharacterObj">
   <div class="col">
     Character:
-    <select [(ngModel)]="selectedCharacter">
-      <option *ngFor="let c of characters" [value]="c"
-        >{{ c.characterName }}</option
-      >
+    <select [(ngModel)]="selectedCharacterID" (change)="chooseCharacter()">
+      <ng-container *ngFor="let c of characters">
+        <option [value]="c.characterID">
+          {{ c.characterName }}
+        </option>
+      </ng-container>
     </select>
     &nbsp;
     <button
