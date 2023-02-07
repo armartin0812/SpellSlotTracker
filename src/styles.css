@@ -5,7 +5,7 @@ body {
   font-family: sans-serif;
 }
 
-.row {
+/* .row {
   display: inline-grid;
   grid-template-columns: auto auto auto;
   width: 100%;
@@ -13,7 +13,7 @@ body {
 
 .col {
   margin: 1px;
-}
+} */
 
 .cdk-overlay-container {
   position: fixed;
