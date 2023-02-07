@@ -2,10 +2,11 @@
   *ngIf="slot"
   class="slot"
   [ngClass]="{'used': slot.slotUsed}"
+  [ngStyle]="{'background-color' : getBackgroundGradiant(slot.spellLevel)}"
   (click)="expendSpell()"
   [cdkContextMenuTriggerFor]="context_menu"
 >
-  <p>{{slot.spellLevel}}</p>
+  <p style="margin-top: 15px;">{{slot.spellLevel}}</p>
 </div>
 
 <ng-template #context_menu>

@@ -13,4 +13,8 @@ export class CharacterEditorComponent {
   save() {
     this.onSave.emit(this.character);
   }
+
+  cancel() {
+    this.onSave.emit(undefined);
+  }
 }

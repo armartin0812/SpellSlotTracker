@@ -5,15 +5,50 @@ body {
   font-family: sans-serif;
 }
 
-/* .row {
-  display: inline-grid;
-  grid-template-columns: auto auto auto;
-  width: 100%;
+/* -------------------------------------------
+Right Click Menu
+*/
+.example-menu {
+  display: inline-flex;
+  flex-direction: column;
+  min-width: 180px;
+  max-width: 280px;
+  background-color: rgb(255, 255, 255);
+  padding: 6px 0;
 }
 
-.col {
-  margin: 1px;
-} */
+.example-menu-item {
+  background-color: transparent;
+  cursor: pointer;
+  border: none;
+
+  user-select: none;
+  min-width: 64px;
+  line-height: 36px;
+  padding: 0 16px;
+
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  flex: 1;
+}
+
+.example-menu-item:hover {
+  background-color: rgb(208, 208, 208);
+}
+
+.example-menu-item:active {
+  background-color: rgb(170, 170, 170);
+}
+/*--------------------------------------------*/
+
+.align-left {
+  text-align: left;
+}
+
+.align-right {
+  text-align: right;
+}
 
 .cdk-overlay-container {
   position: fixed;

@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { filter } from "rxjs";
+import { initializeSpellSlots } from "src/assets/functions";
 import { Character } from "../assets/models";
 
 @Component({
@@ -32,8 +33,8 @@ export class AppComponent implements OnInit {
   createNewCharacter() {
     var newChar = new Character();
     newChar.characterID = Date.now().toString(36);
-    this.characters.push(Object.assign(Object.assign(newChar)));
-    this.editCharacter(this.characters[this.characters.length - 1]);
+    initializeSpellSlots(newChar);
+    this.editCharacter(Object.assign(newChar));
   }
 
   editCharacter(c: Character) {
@@ -41,15 +42,23 @@ export class AppComponent implements OnInit {
   }
 
   saveCharacter(c: Character) {
-    this.updateLocalStorage();
+    if (c) {
+      this.characters.push(Object.assign(c));
+      this.updateLocalStorage();
+    }
     this.editCharacterObj = undefined;
   }
 
   deleteCharacter(c: Character) {
-    var i = this.characters.indexOf(c);
-    this.characters.splice(i, 1);
-    this.editCharacterObj = undefined;
-    this.updateLocalStorage();
+    if (
+      window.confirm("Are you sure you wish to delete " + c.characterName + "?")
+    ) {
+      var i = this.characters.indexOf(c);
+      this.characters.splice(i, 1);
+      this.editCharacterObj = undefined;
+      this.selectedCharacter = undefined;
+      this.updateLocalStorage();
+    }
   }
 
   chooseCharacter() {
@@ -72,6 +81,14 @@ export class AppComponent implements OnInit {
       );
     } catch (e) {
       console.log("Local Storage save operation failed: " + e.message);
+    }
+  }
+
+  clearLocalStorage() {
+    try {
+      localStorage.clear();
+    } catch (e) {
+      console.log("Local Storage clear operation failed");
     }
   }
 }

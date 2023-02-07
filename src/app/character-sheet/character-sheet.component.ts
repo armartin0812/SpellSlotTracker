@@ -25,9 +25,8 @@ export class CharacterSheetComponent implements OnChanges {
     }
   }
 
-  longRest(notify: boolean) {
+  longRest() {
     longRest(this.character);
     this._cdr.detectChanges();
-    if (notify) alert("long rest achieved!");
   }
 }

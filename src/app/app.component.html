@@ -4,6 +4,13 @@
     Welcome to {{ title }}!
   </h1>
 </div>
+<ng-template #context_menu>
+  <div class="example-menu" cdkMenu>
+    <button class="example-menu-item" cdkMenuItem (click)="clearLocalStorage()">
+      Clear Stored Characters
+    </button>
+  </div>
+</ng-template>
 <div class="row" *ngIf="!editCharacterObj">
   <div class="col">
     Character:
@@ -14,11 +21,14 @@
         </option>
       </ng-container>
     </select>
-    &nbsp;
+  </div>
+  <div class="col">
     <button
       type="button"
+      class="btn btn-primary"
       title="Click to create a brand new Character"
       (click)="createNewCharacter()"
+      [cdkContextMenuTriggerFor]="context_menu"
     >
       Add New
     </button>
@@ -28,10 +38,20 @@
   <div class="col">
     <button
       type="button"
+      class="btn btn-primary"
       title="Click to edit the details for this Character"
       (click)="editCharacter(selectedCharacter)"
     >
-      Edit
+      Edit {{ selectedCharacter.characterName }}
+    </button>
+    &nbsp;
+    <button
+      type="button"
+      class="btn btn-danger"
+      title="Click to delete this Character"
+      (click)="deleteCharacter(selectedCharacter)"
+    >
+      Delete {{ selectedCharacter.characterName }}
     </button>
     <br />
     <character-sheet [character]="selectedCharacter"></character-sheet>

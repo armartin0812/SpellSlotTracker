@@ -1,20 +1,45 @@
 <div class="row">
   <div class="col">
-    Character Name: {{ character.characterName }} <br />
-    Character Class: {{ character.characterClass }} <br />
-    Character Level: {{ character.characterLevel }} <br />
-    <button
-      type="button"
-      title="Click to reset all of you Spell Slots for the day"
-      (click)="longRest(true)"
-    >
-      Long Rest
-    </button>
+    <div class="row">
+      <div class="col align-right">
+        Character Name:
+      </div>
+      <div class="col align-left">
+        {{ character.characterName }}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col align-right">
+        Character Class:
+      </div>
+      <div class="col align-left">
+        {{ character.characterClass }}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col align-right">
+        Character Level:
+      </div>
+      <div class="col align-left">
+        {{ character.characterLevel }}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <button
+          type="button"
+          title="Click to reset all of you Spell Slots for the day"
+          (click)="longRest()"
+        >
+          Long Rest
+        </button>
+      </div>
+    </div>
   </div>
   <div class="col">
-    Slots
+    <h3>Slots</h3>
     <div class="row" *ngFor="let s of character.spells">
-      <div class="slotRow">
+      <div class="slotRow align-left">
         <ng-container *ngFor="let l of s.slots">
           <slot-tracker [slot]="l"></slot-tracker>
         </ng-container>
