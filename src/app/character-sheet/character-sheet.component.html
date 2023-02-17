@@ -1,0 +1,51 @@
+<div class="row">
+  <div class="col">
+    <h3>Character Details</h3>
+    <div class="row">
+      <div class="col align-right">
+        Character Name:
+      </div>
+      <div class="col align-left">
+        {{ character.characterName }}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col align-right">
+        Character Class:
+      </div>
+      <div class="col align-left">
+        {{ character.characterClass }}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col align-right">
+        Character Level:
+      </div>
+      <div class="col align-left">
+        {{ character.characterLevel }}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <button
+          type="button"
+          class="btn btn-primary"
+          title="Click to reset all of you Spell Slots for the day"
+          (click)="longRest()"
+        >
+          Long Rest
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="col">
+    <h3>Slots</h3>
+    <div class="row" *ngFor="let s of character.spells">
+      <div class="slotRow align-left">
+        <ng-container *ngFor="let l of s.slots">
+          <slot-tracker [slot]="l"></slot-tracker>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
