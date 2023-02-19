@@ -36,10 +36,23 @@
       <div class="col align-left">
         <input
           type="number"
-          style="width: 40px;"
+          style="width: 45px;"
           [(ngModel)]="character.characterLevel"
           min="0"
           max="20"
+        />
+      </div>
+    </div>
+    <div class="row">
+      <div class="col align-right">
+        Character Max HP:
+      </div>
+      <div class="col align-left">
+        <input
+          type="number"
+          style="width: 60px;"
+          [(ngModel)]="character.maxHP"
+          min="0"
         />
       </div>
     </div>

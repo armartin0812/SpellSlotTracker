@@ -26,6 +26,66 @@
       </div>
     </div>
     <div class="row">
+      <h4>HP</h4>
+      <div class="col">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          title="Click to remove 10 HP from your character"
+          (click)="subtract10()"
+        >
+          -10
+        </button> &nbsp;
+        <button
+          type="button"
+          class="btn btn-secondary"
+          title="Click to remove 5 HP from your character"
+          (click)="subtract5()"
+        >
+          -5
+        </button> &nbsp;
+        <button
+          type="button"
+          class="btn btn-secondary"
+          title="Click to remove 1 HP from your character"
+          (click)="subtract1()"
+        >
+          -1
+        </button> &nbsp;
+        <input
+            type="number"
+            style="width: 60px;"
+            [(ngModel)]="character.currentHP"
+            min="0"
+          />
+        / {{character.maxHP}}
+        <button
+          type="button"
+          class="btn btn-primary"
+          title="Click to add 1 HP to your character"
+          (click)="add1()"
+        >
+          +1
+        </button> &nbsp;
+        <button
+          type="button"
+          class="btn btn-primary"
+          title="Click to add 5 HP to your character"
+          (click)="add5()"
+        >
+          +5
+        </button> &nbsp;
+        <button
+          type="button"
+          class="btn btn-primary"
+          title="Click to add 10 HP to your character"
+          (click)="add10()"
+        >
+          +10
+        </button>
+      </div>
+    </div>
+    <div class="row">
       <div class="col">
         <button
           type="button"
