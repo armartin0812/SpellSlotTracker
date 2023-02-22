@@ -4,6 +4,7 @@ export class SpellLevel {
   spellLevel: number = 0;
   maxSlots: number = 0;
   slots: SpellSlot[] = [];
+  recoverable: boolean = true;
 }
 
 export class SpellSlot {

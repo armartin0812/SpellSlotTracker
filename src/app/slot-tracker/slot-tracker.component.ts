@@ -8,6 +8,7 @@ import { SpellSlot } from "src/assets/models";
 })
 export class SlotTrackerComponent {
   @Input() slot: SpellSlot = new SpellSlot;
+  @Input() allowRecovery: boolean = true;
 
   expendSpell() {
     this.slot.slotUsed = true;

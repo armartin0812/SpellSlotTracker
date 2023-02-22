@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { Character } from "../../assets/models";
+import { Character, SpellLevel } from "../../assets/models";
 
 @Component({
   selector: "character-editor",
@@ -17,5 +17,19 @@ export class CharacterEditorComponent {
 
   cancel() {
     this.onSave.emit(undefined);
+  }
+
+  addCustom() {
+    var slot = new SpellLevel;
+    slot.spellLevel = 0;
+    slot.slots = [];
+    this.character.slots.push(slot);
+  }
+
+  removeCustom(s: SpellLevel) {
+    var i = this.character.slots.indexOf(s);
+    if (i && i >= 0) {
+      this.character.slots.splice(i, 1);
+    }
   }
 }

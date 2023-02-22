@@ -89,6 +89,19 @@ export function longRest(character: Character) {
       }
     });
   }
+  if (character.slots !== undefined) {
+    character.slots.forEach((s) => {
+      s.slots = [];
+      for (var i = 0; i < s.maxSlots; ++i) {
+        var slot: SpellSlot = new SpellSlot();
+        slot.spellLevel = s.spellLevel;
+        slot.slotAbrev = s.lvlAbrev;
+        slot.slotUsed = false;
+        var t = Object.assign(slot);
+        s.slots.push(t);
+      }
+    });
+  }
   character.currentHP = character.maxHP;
   character.concentrating = false;
 }

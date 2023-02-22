@@ -12,7 +12,7 @@
 <ng-template #context_menu>
   <div class="example-menu" cdkMenu>
     <button
-      *ngIf="slot.slotUsed"
+      *ngIf="slot.slotUsed && allowRecovery"
       class="example-menu-item"
       cdkMenuItem
       (click)="recover()"

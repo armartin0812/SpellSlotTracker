@@ -81,9 +81,78 @@
           [(ngModel)]="s.maxSlots"
           min="0"
           max="20"
+          title="Maximum number of slots"
         />
       </div>
     </div>
+    <div class="row">
+      <div class="col">
+        Custom Trackers
+        <button
+          type="button"
+          class="btn btn-help"
+          placement="end"
+          ngbPopover="You can use an additional tracker to keep track of any feature that has limited uses per day, like Divine Sense, Channel Divinity, Sorcery Points, Rages, Ki Points, and many others"
+          popoverTitle="Helpful Tip"
+        >
+          ?
+        </button>
+      </div>
+    </div>
+    <div class="row" *ngFor="let s of character.slots">
+      <div class="col align-right">  
+        <button
+          type="button"
+          class="btn btn-secondary"
+          title="Click to remove this custom tracker"
+          (click)="removeCustom(s)"
+        >
+          -
+        </button>   
+        &nbsp;   
+        <input
+          type="text"
+          [(ngModel)]="s.lvlName"
+          title="Name of the custom tracker"
+        />
+      </div>
+      <div class="col align-left">        
+        <input
+          type="text"
+          style="width: 40px;"
+          [(ngModel)]="s.lvlAbrev"
+          title="Abbreviation to use for displaying the individual slots"
+        />
+        <input
+          type="number"
+          style="width: 40px;"
+          [(ngModel)]="s.maxSlots"
+          min="0"
+          max="20"
+          title="Maximum number of slots"
+        />
+        &nbsp;
+        Recoverable?:
+        <input 
+          type="checkbox"
+          [(ngModel)]="s.recoverable"
+          title="Can you recover uses of this slot before a Long Rest"
+        /> 
+      </div>      
+    </div>
+    <div class="row">
+      <div class="col">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          title="Click to add a custom tracker"
+          (click)="addCustom()"
+        >
+          +
+        </button>
+      </div>
+    </div>
+    <br/>
     <div class="row">
       <div class="col">
         <button
