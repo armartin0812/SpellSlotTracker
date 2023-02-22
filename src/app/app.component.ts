@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { faCloud, faMagicWandSparkles, faListCheck } from '@fortawesome/free-solid-svg-icons';
 import { initializeSpellSlots } from "src/assets/functions";
 import { Character } from "../assets/models";
 
@@ -8,6 +9,11 @@ import { Character } from "../assets/models";
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+  //Font Awesome icons
+  faCloud = faCloud;
+  faMagicWandSparkles = faMagicWandSparkles;
+  faListCheck = faListCheck;
+  
   title = 'Spell Slot Tracker';
   characters: Character[] = [];
   selectedCharacter: Character | undefined;

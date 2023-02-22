@@ -10,7 +10,8 @@ import { CharacterSheetComponent } from "./character-sheet/character-sheet.compo
 import { CharacterEditorComponent } from "./character-editor/character-editor.component";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap"
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatRadioModule } from '@angular/material/radio'
+import { MatRadioModule } from '@angular/material/radio';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { MatRadioModule } from '@angular/material/radio'
     CdkMenuModule,
     MatSlideToggleModule,
     MatRadioModule,
-    NgbModule
+    NgbModule,
+    FontAwesomeModule
   ],
   providers: [],
   bootstrap: [AppComponent]

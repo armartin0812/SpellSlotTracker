@@ -45,6 +45,23 @@ Right Click Menu
     text-align: right;
 }
 
+.btn-help {
+    height: 15px;
+    width: 15px;
+    background: #ccc;
+    text-align: center;
+    border-radius: 100% !important;
+    cursor: pointer;
+    font-size: 10px !important;
+    border: solid 1px gray !important;
+    padding: 0px !important;
+    margin: 2px;
+}
+
+.btn-help:hover {
+    background: gray !important;
+}
+
 .cdk-overlay-container {
     position: fixed;
     z-index: 1000;

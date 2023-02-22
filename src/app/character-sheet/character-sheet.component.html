@@ -38,7 +38,17 @@
     </div>    
     <br/>
     <div class="row">
-      <h4>HP</h4>
+      <h4>HP 
+        <button
+          type="button"
+          class="btn btn-help"
+          placement="top"
+          ngbPopover="Use the buttons to quickly add and subtract hit points, or type your HP into the textbox. If you reach 0 HP, a tracker for Death Saving throws will appear"
+          popoverTitle="Helpful Tip"
+        >
+          ?
+        </button>
+      </h4>
       <div class="col">
         <button
           type="button"
@@ -148,11 +158,31 @@
         >
           Long Rest
         </button>
+        <button
+          type="button"
+          class="btn btn-help"
+          placement="end"
+          ngbPopover="Long Rest will reset you hit points to maximum, and refresh all your used spell slots."
+          popoverTitle="Helpful Tip"
+        >
+          ?
+        </button>
       </div>
     </div>
   </div>
   <div class="col">
-    <h3>Slots</h3>
+    <h3>Slots 
+      <button
+        type="button"
+        class="btn btn-help"
+        placement="top"
+        ngbPopover="Click on a spell slot to mark it as used. Right click on a used spell slot to Recover it"
+        popoverTitle="Helpful Tip"
+      >
+        ?
+      </button>
+    </h3>
+    
     <div class="row" *ngFor="let s of character.spells">
       <div class="slotRow align-left">
         <ng-container *ngFor="let l of s.slots">
