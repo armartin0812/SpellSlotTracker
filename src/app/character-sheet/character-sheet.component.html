@@ -26,6 +26,18 @@
       </div>
     </div>
     <div class="row">
+      <div class="col align-right">
+        Concentration:
+      </div>
+      <div class="col align-left">         
+        <mat-slide-toggle
+          [color]="'primary'"
+          [(ngModel)]="character.concentrating">          
+        </mat-slide-toggle>
+      </div>
+    </div>    
+    <br/>
+    <div class="row">
       <h4>HP</h4>
       <div class="col">
         <button
@@ -57,6 +69,7 @@
             style="width: 60px;"
             [(ngModel)]="character.currentHP"
             min="0"
+            [max]="character.maxHP"
           />
         / {{character.maxHP}}
         <button
@@ -85,6 +98,46 @@
         </button>
       </div>
     </div>
+    <div class="row" *ngIf="character.currentHP == 0">
+      <h4>Death Saves</h4>
+      <div class="col">
+        <div class="radio-group">
+          <div style="padding: 6px 0;">Successes:</div>
+          <div style="padding: 6px 0;">Failures:</div>
+        </div>
+        <div class="radio-group">
+          <mat-radio-group [(ngModel)]="deathSaveSuccess1">
+            <mat-radio-button value="true">            
+            </mat-radio-button>
+          </mat-radio-group>
+          <mat-radio-group [(ngModel)]="deathSaveFail1">
+            <mat-radio-button value="true">            
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <div class="radio-group">
+          <mat-radio-group [(ngModel)]="deathSaveSuccess2">
+            <mat-radio-button value="true">            
+            </mat-radio-button>
+          </mat-radio-group>
+          <mat-radio-group [(ngModel)]="deathSaveFail2">
+            <mat-radio-button value="true">            
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <div class="radio-group">
+          <mat-radio-group [(ngModel)]="deathSaveSuccess3">
+            <mat-radio-button value="true">            
+            </mat-radio-button>
+          </mat-radio-group>
+          <mat-radio-group [(ngModel)]="deathSaveFail3">
+            <mat-radio-button value="true">            
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+    </div>
+    <br/>
     <div class="row">
       <div class="col">
         <button

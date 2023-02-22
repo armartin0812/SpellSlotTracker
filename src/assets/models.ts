@@ -34,6 +34,7 @@ export class Character {
   characterLevel: number = 0;
   currentHP: number = 0;
   maxHP: number = 0;
+  concentrating: boolean = false;
   spells: SpellLevel[] = [];
   slots: SpellLevel[] = [];
 }

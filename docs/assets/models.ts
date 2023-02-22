@@ -1,5 +1,6 @@
 export class SpellLevel {
   lvlName: string = '';
+  lvlAbrev: string = '';
   spellLevel: number = 0;
   maxSlots: number = 0;
   slots: SpellSlot[] = [];
@@ -7,6 +8,7 @@ export class SpellLevel {
 
 export class SpellSlot {
   spellLevel: number = 0;
+  slotAbrev: string = '';
   slotUsed: boolean = false;
 }
 
@@ -30,5 +32,9 @@ export class Character {
   characterName: string = '';
   characterClass: PlayerClass = 0;
   characterLevel: number = 0;
+  currentHP: number = 0;
+  maxHP: number = 0;
+  concentrating: boolean = false;
   spells: SpellLevel[] = [];
+  slots: SpellLevel[] = [];
 }

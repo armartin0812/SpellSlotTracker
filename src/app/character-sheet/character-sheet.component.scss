@@ -2,3 +2,9 @@
   display: inline-block;
   width: 100%;
 }
+
+.radio-group {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+}

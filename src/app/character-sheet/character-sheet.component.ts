@@ -15,9 +15,12 @@ import { longRest } from "../../assets/functions";
 })
 export class CharacterSheetComponent implements OnChanges {
   @Input() character: Character = new Character;
-  deathSave1: boolean | undefined;
-  deathSave2: boolean | undefined;
-  deathSave3: boolean | undefined;
+  deathSaveSuccess1: boolean | undefined;
+  deathSaveSuccess2: boolean | undefined;
+  deathSaveSuccess3: boolean | undefined;
+  deathSaveFail1: boolean | undefined;
+  deathSaveFail2: boolean | undefined;
+  deathSaveFail3: boolean | undefined;
 
   constructor(private _cdr: ChangeDetectorRef) {}
 
@@ -98,8 +101,12 @@ export class CharacterSheetComponent implements OnChanges {
   }
 
   resetDeathSaves() {
-    this.deathSave1 = undefined;
-    this.deathSave2 = undefined;
-    this.deathSave3 = undefined;
+    this.deathSaveSuccess1 = undefined;
+    this.deathSaveSuccess2 = undefined;
+    this.deathSaveSuccess3 = undefined;
+    this.deathSaveFail1 = undefined;
+    this.deathSaveFail2 = undefined;
+    this.deathSaveFail3 = undefined;
+    this.character.concentrating = false;
   }
 }

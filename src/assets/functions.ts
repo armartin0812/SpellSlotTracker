@@ -90,4 +90,5 @@ export function longRest(character: Character) {
     });
   }
   character.currentHP = character.maxHP;
+  character.concentrating = false;
 }
