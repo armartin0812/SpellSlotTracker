@@ -65,3 +65,43 @@
     ></character-editor>
   </div>
 </div>
+<div *ngIf="!editCharacterObj && !selectedCharacter">
+  <br/>
+  <div class="row">
+    <div class="col">
+      <p>
+        Welcome to the spell slot tracker, your one stop player companion for D&D and Pathfinder.
+      </p>    
+    </div>
+  </div>
+  <div class="row">
+      <h4>How It Works</h4>
+    <div class="col card p-3 m-3">
+      <fa-icon [icon]="faMagicWandSparkles" size="xl"></fa-icon>
+      <br/>
+      <h5>Spell Slots</h5>
+      <p style="padding: 4px;">
+        Spell Slot Tracker lets you enter Character details for your D&D or Pathfinder characters, then helps you keep track of things like spell slot usage, current hit points and so much more during game play. 
+        Simply click the spell slots to use them, and they will be marked as used until you take a long rest, or right click on the slot to "Recover" it using a feature such as Arcane Recovery. 
+      </p>
+    </div>
+    <div class="col card p-3 m-3">
+      <fa-icon [icon]="faListCheck" size="xl"></fa-icon>
+      <br/>
+      <h5>Custom trackers, Hit Points and more</h5>
+      <p style="padding: 4px">
+        Not a character with spell slots? No Problem! The custom slot trackers allow you to track things like Rages, Ki Points, Action Surge, racial features, or anything else you want to keep track of.
+        <br/><br/>
+        Track hit points by clicking the buttons to add and remove hit points during the heat of battle. If you fall to 0 HP, use the Death Save tracker to keep track of your Death Saving Throws.
+      </p>
+    </div>
+    <div class="col card p-3 m-3">
+      <fa-icon [icon]="faCloud" size="xl"></fa-icon>
+      <br/>
+      <h5>Save Characters between visits</h5>
+      <p style="padding: 4px;">
+        The Spell Slot Tracker app uses your browser's local storage cache to save your characters between visits, so you can keep coming back. Don't want to save your character? Simply clear your browser stored files, delete your characters using the "Delete ____" button, or right click on the "Add New Character" button select "Clear Stored Characters".
+      </p>
+    </div>
+  </div>
+</div>

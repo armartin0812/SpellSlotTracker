@@ -26,6 +26,129 @@
       </div>
     </div>
     <div class="row">
+      <div class="col align-right">
+        Concentration:
+      </div>
+      <div class="col align-left">         
+        <mat-slide-toggle
+          [color]="'primary'"
+          [(ngModel)]="character.concentrating">          
+        </mat-slide-toggle>
+      </div>
+    </div>    
+    <br/>
+    <div class="row">
+      <h4>HP 
+        <button
+          type="button"
+          class="btn btn-help"
+          placement="top"
+          ngbPopover="Use the buttons to quickly add and subtract hit points, or type your HP into the textbox. If you reach 0 HP, a tracker for Death Saving throws will appear"
+          popoverTitle="Helpful Tip"
+        >
+          ?
+        </button>
+      </h4>
+      <div class="col">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          title="Click to remove 10 HP from your character"
+          (click)="subtract10()"
+        >
+          -10
+        </button> &nbsp;
+        <button
+          type="button"
+          class="btn btn-secondary"
+          title="Click to remove 5 HP from your character"
+          (click)="subtract5()"
+        >
+          -5
+        </button> &nbsp;
+        <button
+          type="button"
+          class="btn btn-secondary"
+          title="Click to remove 1 HP from your character"
+          (click)="subtract1()"
+        >
+          -1
+        </button> &nbsp;
+        <input
+            type="number"
+            style="width: 60px;"
+            [(ngModel)]="character.currentHP"
+            min="0"
+            [max]="character.maxHP"
+          />
+        / {{character.maxHP}}
+        <button
+          type="button"
+          class="btn btn-primary"
+          title="Click to add 1 HP to your character"
+          (click)="add1()"
+        >
+          +1
+        </button> &nbsp;
+        <button
+          type="button"
+          class="btn btn-primary"
+          title="Click to add 5 HP to your character"
+          (click)="add5()"
+        >
+          +5
+        </button> &nbsp;
+        <button
+          type="button"
+          class="btn btn-primary"
+          title="Click to add 10 HP to your character"
+          (click)="add10()"
+        >
+          +10
+        </button>
+      </div>
+    </div>
+    <div class="row" *ngIf="character.currentHP == 0">
+      <h4>Death Saves</h4>
+      <div class="col">
+        <div class="radio-group">
+          <div style="padding: 6px 0;">Successes:</div>
+          <div style="padding: 6px 0;">Failures:</div>
+        </div>
+        <div class="radio-group">
+          <mat-radio-group [(ngModel)]="deathSaveSuccess1">
+            <mat-radio-button value="true">            
+            </mat-radio-button>
+          </mat-radio-group>
+          <mat-radio-group [(ngModel)]="deathSaveFail1">
+            <mat-radio-button value="true">            
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <div class="radio-group">
+          <mat-radio-group [(ngModel)]="deathSaveSuccess2">
+            <mat-radio-button value="true">            
+            </mat-radio-button>
+          </mat-radio-group>
+          <mat-radio-group [(ngModel)]="deathSaveFail2">
+            <mat-radio-button value="true">            
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <div class="radio-group">
+          <mat-radio-group [(ngModel)]="deathSaveSuccess3">
+            <mat-radio-button value="true">            
+            </mat-radio-button>
+          </mat-radio-group>
+          <mat-radio-group [(ngModel)]="deathSaveFail3">
+            <mat-radio-button value="true">            
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+    </div>
+    <br/>
+    <div class="row">
       <div class="col">
         <button
           type="button"
@@ -35,15 +158,44 @@
         >
           Long Rest
         </button>
+        <button
+          type="button"
+          class="btn btn-help"
+          placement="end"
+          ngbPopover="Long Rest will reset you hit points to maximum, and refresh all your used spell slots."
+          popoverTitle="Helpful Tip"
+        >
+          ?
+        </button>
       </div>
     </div>
   </div>
   <div class="col">
-    <h3>Slots</h3>
+    <h3>Slots 
+      <button
+        type="button"
+        class="btn btn-help"
+        placement="top"
+        ngbPopover="Click on a spell slot to mark it as used. Right click on a used spell slot to Recover it"
+        popoverTitle="Helpful Tip"
+      >
+        ?
+      </button>
+    </h3>
+    
     <div class="row" *ngFor="let s of character.spells">
       <div class="slotRow align-left">
         <ng-container *ngFor="let l of s.slots">
           <slot-tracker [slot]="l"></slot-tracker>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="row" *ngFor="let s of character.slots">
+      <h4>{{s.lvlName}}</h4>
+      <div class="slotRow align-left">
+        <ng-container *ngFor="let l of s.slots">
+          <slot-tracker [slot]="l" [allowRecovery]="s.recoverable"></slot-tracker>
         </ng-container>
       </div>
     </div>
