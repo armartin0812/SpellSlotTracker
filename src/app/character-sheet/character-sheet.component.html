@@ -36,6 +36,45 @@
         </mat-slide-toggle>
       </div>
     </div>    
+    <div class="row">
+      <div class="col align-right">      
+        Status Effects:
+      </div>
+      <div class="col align-left">
+        <button
+          type="button"
+          class="btn btn-help"
+          placement="top"
+          ngbPopover="Enter values to indicate whatever status effects your character currently has. When those effects end, remove them from the list. Note: all effects will be cleared during a 'long rest', you will need to add back effects that last through a long rest"
+          popoverTitle="Helpful Tip"
+        >
+          ?
+        </button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <mat-form-field class="chip-list" appearance="fill">
+          <mat-chip-grid #chipGrid>
+            <mat-chip-row *ngFor="let e of character.statusEffects"
+                          (removed)="removeEffect(e)"
+                          [editable]="true"
+                          (edited)="editEffect(e, $event)"
+                          [title]="'press enter to edit ' + e.effect">
+              {{e.effect}}
+              <button matChipRemove [title]="'remove ' + e.effect">
+                X
+              </button>
+            </mat-chip-row>
+            <input placeholder="New effect..."
+                   [matChipInputFor]="chipGrid"
+                   [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                   [matChipInputAddOnBlur]="true"
+                   (matChipInputTokenEnd)="addEffect($event)"/>
+          </mat-chip-grid>
+        </mat-form-field>
+      </div>
+    </div>
     <br/>
     <div class="row">
       <h4>HP 

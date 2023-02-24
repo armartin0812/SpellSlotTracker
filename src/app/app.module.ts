@@ -11,7 +11,9 @@ import { CharacterEditorComponent } from "./character-editor/character-editor.co
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap"
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatRadioModule } from '@angular/material/radio';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatChipsModule } from '@angular/material/chips'
 
 @NgModule({
   declarations: [
@@ -28,7 +30,9 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
     MatSlideToggleModule,
     MatRadioModule,
     NgbModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    MatFormFieldModule,
+    MatChipsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
