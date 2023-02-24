@@ -28,6 +28,10 @@ export enum PlayerClass {
   Wizard = 12
 }
 
+export class StatusEffect {
+  effect: string = '';
+}
+
 export class Character {
   characterID: string = '';
   characterName: string = '';
@@ -38,4 +42,5 @@ export class Character {
   concentrating: boolean = false;
   spells: SpellLevel[] = [];
   slots: SpellLevel[] = [];
+  statusEffects: StatusEffect[] = [];
 }

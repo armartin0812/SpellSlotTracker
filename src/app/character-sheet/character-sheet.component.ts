@@ -5,8 +5,10 @@ import {
   OnChanges,
   SimpleChanges
 } from "@angular/core";
-import { Character } from "../../assets/models";
+import { Character, StatusEffect } from "../../assets/models";
 import { longRest } from "../../assets/functions";
+import {COMMA, ENTER} from '@angular/cdk/keycodes';
+import {MatChipEditedEvent, MatChipInputEvent} from '@angular/material/chips';
 
 @Component({
   selector: "character-sheet",
@@ -14,6 +16,7 @@ import { longRest } from "../../assets/functions";
   styleUrls: ["./character-sheet.component.scss"]
 })
 export class CharacterSheetComponent implements OnChanges {
+  readonly separatorKeysCodes = [ENTER, COMMA] as const;
   @Input() character: Character = new Character;
   deathSaveSuccess1: boolean | undefined;
   deathSaveSuccess2: boolean | undefined;
@@ -108,5 +111,43 @@ export class CharacterSheetComponent implements OnChanges {
     this.deathSaveFail2 = undefined;
     this.deathSaveFail3 = undefined;
     this.character.concentrating = false;
+  }
+
+  addEffect(event: MatChipInputEvent) {
+    var value = (event.value || '').trim();
+
+    if (!this.character.statusEffects){
+      this.character.statusEffects = [];
+    }
+
+    if (value) {
+      this.character.statusEffects.push({effect: value});
+    }
+    
+    event.chipInput!.clear();
+  }
+
+  editEffect(e: StatusEffect, event: MatChipEditedEvent) {
+    var value = event.value.trim();
+
+    // Remove if it no longer has a value
+    if (!value) {
+      this.removeEffect(e);
+      return;
+    }
+
+    // Edit existing
+    var i = this.character.statusEffects.indexOf(e);
+    if (i >= 0) {
+      this.character.statusEffects[i].effect = value;
+    }
+  }
+
+  removeEffect(fruit: StatusEffect): void {
+    var i = this.character.statusEffects.indexOf(fruit);
+
+    if (i >= 0) {
+      this.character.statusEffects.splice(i, 1);
+    }
   }
 }

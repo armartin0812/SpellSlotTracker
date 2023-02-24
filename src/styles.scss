@@ -1,4 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+
+// Include the common styles for Angular Material. 
+@include mat.core();
 
 /* -------------------------------------------
 Right Click Menu
@@ -60,6 +64,10 @@ Right Click Menu
 
 .btn-help:hover {
     background: gray !important;
+}
+
+.chip-list { 
+    width:75%;
 }
 
 .cdk-overlay-container {
