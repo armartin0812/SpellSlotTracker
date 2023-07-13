@@ -14,6 +14,8 @@ import { MatRadioModule } from '@angular/material/radio';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatChipsModule } from '@angular/material/chips'
+import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
+import { GoogleLoginProvider, FacebookLoginProvider } from 'angularx-social-login';
 
 @NgModule({
   declarations: [
@@ -32,9 +34,32 @@ import { MatChipsModule } from '@angular/material/chips'
     NgbModule,
     FontAwesomeModule,
     MatFormFieldModule,
-    MatChipsModule,
+      MatChipsModule,
+    SocialLoginModule
   ],
-  providers: [],
+  providers: [
+    {
+        provide: 'SocialAuthServiceConfig',
+        useValue: {
+            autoLogin: false,
+            providers: [
+                {
+                    id: GoogleLoginProvider.PROVIDER_ID,
+                    provider: new GoogleLoginProvider(
+                        'AIzaSyDH5xupb7F81jLGsD7qqcLk9bqc6vqRHkk'
+                    )
+                },
+                {
+                    id: FacebookLoginProvider.PROVIDER_ID,
+                    provider: new FacebookLoginProvider('298498672646742')
+                }
+            ],
+            onError: (err) => {
+                console.error(err);
+            }
+        } as SocialAuthServiceConfig,
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

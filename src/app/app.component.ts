@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { faCloud, faMagicWandSparkles, faListCheck } from '@fortawesome/free-solid-svg-icons';
 import { initializeSpellSlots } from "src/assets/functions";
 import { Character } from "../assets/models";
+import { SocialAuthService, SocialUser } from "angularx-social-login";
+import { FacebookLoginProvider, GoogleLoginProvider } from "angularx-social-login";
+
 
 @Component({
   selector: 'app-root',
@@ -19,8 +22,17 @@ export class AppComponent {
   selectedCharacter: Character | undefined;
   selectedCharacterID: string = '';
   editCharacterObj: Character | undefined;
+    
+  user: SocialUser | undefined;
+  loggedIn: boolean = false;
 
-  ngOnInit() {
+  constructor(private authService: SocialAuthService) { }
+
+   ngOnInit() {
+    this.authService.authState.subscribe((user) => {
+        this.user = user;
+        this.loggedIn = (user != null);
+    });
     this.characters = [];
     //check local storage for any saved Characters
     try {
@@ -33,6 +45,18 @@ export class AppComponent {
     } catch (e) {
       console.log("No Local Storage found");
     }
+  }
+
+  signInWithFB(): void {
+    this.authService.signIn(FacebookLoginProvider.PROVIDER_ID);
+  }
+
+  signOut(): void {
+    this.authService.signOut();
+  }
+
+  refreshToken(): void {
+    this.authService.refreshAuthToken(GoogleLoginProvider.PROVIDER_ID);
   }
 
   createNewCharacter() {

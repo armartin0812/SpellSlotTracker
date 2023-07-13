@@ -9,7 +9,7 @@ import { Character, StatusEffect } from "../../assets/models";
 import { longRest, displayPlayerClass } from "../../assets/functions";
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {MatChipEditedEvent, MatChipInputEvent} from '@angular/material/chips';
-import { PlayerClass } from "docs/assets/models";
+import { PlayerClass } from "../../assets/models";
 
 @Component({
   selector: "character-sheet",
