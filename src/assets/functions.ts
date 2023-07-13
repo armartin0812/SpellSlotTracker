@@ -1,4 +1,4 @@
-import { Character, SpellLevel, SpellSlot } from "./models";
+import { Character, PlayerClass, SpellLevel, SpellSlot } from "./models";
 
 export function initializeSpellSlots(character: Character) {
   character.spells = [];
@@ -105,4 +105,34 @@ export function longRest(character: Character) {
   character.currentHP = character.maxHP;
   character.concentrating = false;
   character.statusEffects = [];
+}
+
+export function displayPlayerClass(c: any): string {
+    switch (c) {
+        case '1':
+            return 'Barbarian';
+        case '2':
+            return 'Bard';
+        case '3':
+            return 'Cleric';
+        case '4':
+            return 'Druid';
+        case '5':
+            return 'Fighter';
+        case '6':
+            return 'Monk';
+        case '7':
+            return 'Paladin';
+        case '8':
+            return 'Ranger';
+        case '9':
+            return 'Rogue';
+        case '10':
+            return 'Sorcerer';
+        case '11':
+            return 'Warlock';
+        case '12':
+            return 'Wizard';
+    };
+    return '?';
 }

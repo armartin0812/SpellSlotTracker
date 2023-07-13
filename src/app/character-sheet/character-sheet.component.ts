@@ -6,9 +6,10 @@ import {
   SimpleChanges
 } from "@angular/core";
 import { Character, StatusEffect } from "../../assets/models";
-import { longRest } from "../../assets/functions";
+import { longRest, displayPlayerClass } from "../../assets/functions";
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {MatChipEditedEvent, MatChipInputEvent} from '@angular/material/chips';
+import { PlayerClass } from "docs/assets/models";
 
 @Component({
   selector: "character-sheet",
@@ -32,6 +33,10 @@ export class CharacterSheetComponent implements OnChanges {
       longRest(this.character);
       this._cdr.detectChanges();
     }
+  }
+    
+  displayClass(c: PlayerClass): string {
+    return displayPlayerClass(c);
   }
 
   longRest() {
