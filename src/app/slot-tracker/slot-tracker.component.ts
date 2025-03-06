@@ -3,6 +3,7 @@ import { SpellSlot } from "src/assets/models";
 
 @Component({
   selector: "slot-tracker",
+  standalone: false,
   templateUrl: "./slot-tracker.component.html",
   styleUrls: ["./slot-tracker.component.scss"]
 })

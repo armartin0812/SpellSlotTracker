@@ -13,6 +13,7 @@ import { PlayerClass } from "../../assets/models";
 
 @Component({
   selector: "character-sheet",
+  standalone: false,
   templateUrl: "./character-sheet.component.html",
   styleUrls: ["./character-sheet.component.scss"]
 })
@@ -35,7 +36,7 @@ export class CharacterSheetComponent implements OnChanges {
     }
   }
     
-  displayClass(c: PlayerClass): string {
+  displayClass(c: PlayerClass | undefined): string {
     return displayPlayerClass(c);
   }
 

@@ -35,7 +35,7 @@ export class StatusEffect {
 export class Character {
   characterID: string = '';
   characterName: string = '';
-  characterClass: PlayerClass = 0;
+  characterClass: PlayerClass | undefined = undefined;
   characterLevel: number = 0;
   currentHP: number = 0;
   maxHP: number = 0;

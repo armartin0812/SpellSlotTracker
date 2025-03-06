@@ -14,16 +14,10 @@ import { MatRadioModule } from '@angular/material/radio';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatChipsModule } from '@angular/material/chips'
-import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
-import { GoogleLoginProvider, FacebookLoginProvider } from 'angularx-social-login';
+import { SocialLoginModule, SocialAuthServiceConfig } from '@abacritt/angularx-social-login';
+import { GoogleLoginProvider, FacebookLoginProvider } from '@abacritt/angularx-social-login';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    SlotTrackerComponent,
-    CharacterSheetComponent,
-    CharacterEditorComponent
-  ],
   imports: [
     BrowserModule,
     AppRoutingModule, 
@@ -34,8 +28,14 @@ import { GoogleLoginProvider, FacebookLoginProvider } from 'angularx-social-logi
     NgbModule,
     FontAwesomeModule,
     MatFormFieldModule,
-      MatChipsModule,
+    MatChipsModule,
     SocialLoginModule
+  ],
+  declarations: [
+    AppComponent,
+    SlotTrackerComponent,
+    CharacterSheetComponent,
+    CharacterEditorComponent
   ],
   providers: [
     {

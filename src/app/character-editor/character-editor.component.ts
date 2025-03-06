@@ -3,6 +3,7 @@ import { Character, SpellLevel } from "../../assets/models";
 
 @Component({
   selector: "character-editor",
+  standalone: false,
   templateUrl: "./character-editor.component.html",
   styleUrls: ["./character-editor.component.scss"]
 })
