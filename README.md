@@ -36,3 +36,23 @@ Spell Slot Tracker is a web application designed to accompany Dungeons & Dragons
 
 This application replaces the traditional pen-and-paper tracking of spell slots and character status during D&D gameplay, making it easier for players to manage their resources and focus on the game.
 
+## Development and Deployment
+
+### Compile Script
+
+The project includes a custom compile script in package.json:
+
+```
+npm run compile
+```
+
+This script runs:
+- `ng build --output-path docs --base-href /SpellSlotTracker/`
+
+Which:
+1. Builds the Angular application
+2. Outputs the compiled files to the "docs" directory
+3. Sets the base URL to "/SpellSlotTracker/"
+
+This configuration is specifically designed for GitHub Pages deployment, as GitHub Pages can serve content from the "/docs" folder in the main branch.
+
