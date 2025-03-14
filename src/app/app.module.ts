@@ -16,6 +16,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatChipsModule } from '@angular/material/chips'
 import { SocialLoginModule, SocialAuthServiceConfig } from '@abacritt/angularx-social-login';
 import { GoogleLoginProvider, FacebookLoginProvider } from '@abacritt/angularx-social-login';
+import { environment } from '../environments/environment';
 
 @NgModule({
   imports: [
@@ -46,12 +47,12 @@ import { GoogleLoginProvider, FacebookLoginProvider } from '@abacritt/angularx-s
                 {
                     id: GoogleLoginProvider.PROVIDER_ID,
                     provider: new GoogleLoginProvider(
-                        'AIzaSyDH5xupb7F81jLGsD7qqcLk9bqc6vqRHkk'
+                        environment.googleClientId
                     )
                 },
                 {
                     id: FacebookLoginProvider.PROVIDER_ID,
-                    provider: new FacebookLoginProvider('298498672646742')
+                    provider: new FacebookLoginProvider(environment.facebookAppId)
                 }
             ],
             onError: (err) => {
