@@ -8,6 +8,8 @@ import { CdkMenuModule } from "@angular/cdk/menu";
 import { SlotTrackerComponent } from "./slot-tracker/slot-tracker.component";
 import { CharacterSheetComponent } from "./character-sheet/character-sheet.component";
 import { CharacterEditorComponent } from "./character-editor/character-editor.component";
+import { LoginComponent } from './login/login.component';
+import { CharacterListComponent } from './character-list/character-list.component';
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap"
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatRadioModule } from '@angular/material/radio';
@@ -17,6 +19,7 @@ import { MatChipsModule } from '@angular/material/chips'
 import { SocialLoginModule, SocialAuthServiceConfig } from '@abacritt/angularx-social-login';
 import { GoogleLoginProvider, FacebookLoginProvider } from '@abacritt/angularx-social-login';
 import { environment } from '../environments/environment';
+import { AuthGuard } from './guards/auth.guard';
 
 @NgModule({
   imports: [
@@ -36,30 +39,33 @@ import { environment } from '../environments/environment';
     AppComponent,
     SlotTrackerComponent,
     CharacterSheetComponent,
-    CharacterEditorComponent
+    CharacterEditorComponent,
+    LoginComponent,
+    CharacterListComponent
   ],
   providers: [
     {
-        provide: 'SocialAuthServiceConfig',
-        useValue: {
-            autoLogin: false,
-            providers: [
-                {
-                    id: GoogleLoginProvider.PROVIDER_ID,
-                    provider: new GoogleLoginProvider(
-                        environment.googleClientId
-                    )
-                },
-                {
-                    id: FacebookLoginProvider.PROVIDER_ID,
-                    provider: new FacebookLoginProvider(environment.facebookAppId)
-                }
-            ],
-            onError: (err) => {
-                console.error(err);
-            }
-        } as SocialAuthServiceConfig,
-    }
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider(
+              environment.googleClientId
+            )
+          },
+          {
+            id: FacebookLoginProvider.PROVIDER_ID,
+            provider: new FacebookLoginProvider(environment.facebookAppId)
+          }
+        ],
+        onError: (err) => {
+          console.error(err);
+        }
+      } as SocialAuthServiceConfig,
+    },
+    AuthGuard
   ],
   bootstrap: [AppComponent]
 })
