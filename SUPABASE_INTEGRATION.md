@@ -301,9 +301,10 @@ begin
     where character_id = character_uuid
   );
   
-  -- Reset concentration
+  -- Reset HP and concentration
   update characters
-  set concentrating = false
+  set current_hp = max_hp
+  , concentrating = false
   where id = character_uuid;
   
   -- Reset death saves if they exist
