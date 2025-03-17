@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
-import { SocialAuthService } from '@abacritt/angularx-social-login';
+import { SupabaseService } from '../services/supabase.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,12 +10,12 @@ import { SocialAuthService } from '@abacritt/angularx-social-login';
 export class AuthGuard implements CanActivate {
   
   constructor(
-    private authService: SocialAuthService,
+    private supabaseService: SupabaseService,
     private router: Router
   ) {}
 
   canActivate(): Observable<boolean> {
-    return this.authService.authState.pipe(
+    return this.supabaseService.authState.pipe(
       take(1),
       map(user => {
         if (user) {

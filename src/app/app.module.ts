@@ -15,11 +15,11 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatRadioModule } from '@angular/material/radio';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatChipsModule } from '@angular/material/chips'
-import { SocialLoginModule, SocialAuthServiceConfig } from '@abacritt/angularx-social-login';
-import { GoogleLoginProvider, FacebookLoginProvider } from '@abacritt/angularx-social-login';
+import { MatChipsModule } from '@angular/material/chips';
 import { environment } from '../environments/environment';
 import { AuthGuard } from './guards/auth.guard';
+import { CallbackComponent } from './auth/callback/callback.component';
+import { SupabaseService } from './services/supabase.service';
 
 @NgModule({
   imports: [
@@ -32,8 +32,7 @@ import { AuthGuard } from './guards/auth.guard';
     NgbModule,
     FontAwesomeModule,
     MatFormFieldModule,
-    MatChipsModule,
-    SocialLoginModule
+    MatChipsModule
   ],
   declarations: [
     AppComponent,
@@ -41,31 +40,12 @@ import { AuthGuard } from './guards/auth.guard';
     CharacterSheetComponent,
     CharacterEditorComponent,
     LoginComponent,
-    CharacterListComponent
+    CharacterListComponent,
+    CallbackComponent
   ],
   providers: [
-    {
-      provide: 'SocialAuthServiceConfig',
-      useValue: {
-        autoLogin: false,
-        providers: [
-          {
-            id: GoogleLoginProvider.PROVIDER_ID,
-            provider: new GoogleLoginProvider(
-              environment.googleClientId
-            )
-          },
-          {
-            id: FacebookLoginProvider.PROVIDER_ID,
-            provider: new FacebookLoginProvider(environment.facebookAppId)
-          }
-        ],
-        onError: (err) => {
-          console.error(err);
-        }
-      } as SocialAuthServiceConfig,
-    },
-    AuthGuard
+    AuthGuard,
+    SupabaseService
   ],
   bootstrap: [AppComponent]
 })

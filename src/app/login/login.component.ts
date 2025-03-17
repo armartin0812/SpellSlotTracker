@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { SocialAuthService, GoogleLoginProvider, FacebookLoginProvider } from '@abacritt/angularx-social-login';
+import { SupabaseService } from '../services/supabase.service';
 
 @Component({
   selector: 'app-login',
@@ -11,30 +11,34 @@ import { SocialAuthService, GoogleLoginProvider, FacebookLoginProvider } from '@
 export class LoginComponent implements OnInit {
   
   constructor(
-    private authService: SocialAuthService,
+    private supabaseService: SupabaseService,
     private router: Router
   ) { }
 
   ngOnInit(): void {
     // Check if already logged in
-    this.authService.authState.subscribe(user => {
+    this.supabaseService.authState.subscribe(user => {
       if (user) {
         this.router.navigate(['/characters']);
       }
     });
   }
 
-  signInWithGoogle(): void {
-    this.authService.signIn(GoogleLoginProvider.PROVIDER_ID)
-      .then(() => {
-        this.router.navigate(['/characters']);
-      });
+  async signInWithGoogle(): Promise<void> {
+    try {
+      await this.supabaseService.signInWithGoogle();
+      // Redirect will happen automatically via OAuth flow
+    } catch (error) {
+      console.error('Error signing in with Google:', error);
+    }
   }
 
-  signInWithFB(): void {
-    this.authService.signIn(FacebookLoginProvider.PROVIDER_ID)
-      .then(() => {
-        this.router.navigate(['/characters']);
-      });
+  async signInWithFB(): Promise<void> {
+    try {
+      await this.supabaseService.signInWithFacebook();
+      // Redirect will happen automatically via OAuth flow
+    } catch (error) {
+      console.error('Error signing in with Facebook:', error);
+    }
   }
 }
