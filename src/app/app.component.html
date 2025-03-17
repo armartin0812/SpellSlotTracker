@@ -6,8 +6,17 @@
       </h1>
     </div>
     <div class="col-2 text-right" *ngIf="user">
-      <div class="user-info">
-        <span class="user-name">{{ user.name }}</span>
+      <div class="user-info d-flex align-items-center justify-content-end">
+        <div class="me-2">
+          <img 
+            *ngIf="user.user_metadata?.avatar_url" 
+            [src]="user.user_metadata?.avatar_url" 
+            alt="User avatar" 
+            class="rounded-circle" 
+            style="width: 32px; height: 32px; object-fit: cover;"
+          >
+        </div>
+        <span class="user-name me-2">{{ user.user_metadata?.full_name || user.email }}</span>
         <button class="btn btn-sm btn-outline-secondary" (click)="signOut()">Sign Out</button>
       </div>
     </div>
