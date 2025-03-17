@@ -4,6 +4,7 @@ import { SocialAuthService, GoogleLoginProvider, FacebookLoginProvider } from '@
 
 @Component({
   selector: 'app-login',
+  standalone: false,
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
