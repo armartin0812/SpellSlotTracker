@@ -14,12 +14,24 @@ export class CallbackComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // The Supabase client will automatically handle the OAuth callback
-    // We just need to redirect the user once authenticated
-    this.supabaseService.authState.subscribe(user => {
+    console.log('Callback component initialized');
+    
+    // Actively process the OAuth callback
+    this.supabaseService.handleAuthCallback().then(() => {
+      // After processing, check if we have a user
+      const user = this.supabaseService.getUser();
+      console.log('User after callback processing:', user);
+      
       if (user) {
+        console.log('Navigating to characters page');
         this.router.navigate(['/characters']);
+      } else {
+        console.log('No user found, navigating to login');
+        this.router.navigate(['/login']);
       }
+    }).catch(error => {
+      console.error('Error handling auth callback:', error);
+      this.router.navigate(['/login']);
     });
   }
 }
