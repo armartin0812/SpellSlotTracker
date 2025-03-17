@@ -22,11 +22,6 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.supabaseService.authState.subscribe((user) => {
       this.user = user;
-      this.loggedIn = (user != null);
-      
-      if (!this.loggedIn) {
-        this.router.navigate(['/login']);
-      }
     });
   }
 

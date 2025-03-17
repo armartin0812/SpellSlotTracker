@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SupabaseService } from '../services/supabase.service';
+import { faCloud, faMagicWandSparkles, faListCheck } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-login',
@@ -9,6 +10,10 @@ import { SupabaseService } from '../services/supabase.service';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+  // Font Awesome icons
+  faCloud = faCloud;
+  faMagicWandSparkles = faMagicWandSparkles;
+  faListCheck = faListCheck;
   
   constructor(
     private supabaseService: SupabaseService,
@@ -22,6 +27,10 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['/characters']);
       }
     });
+
+    const user = this.supabaseService.getUser();
+    console.log('Manually checking user:', user);
+
   }
 
   async signInWithGoogle(): Promise<void> {
@@ -33,12 +42,12 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  async signInWithFB(): Promise<void> {
-    try {
-      await this.supabaseService.signInWithFacebook();
-      // Redirect will happen automatically via OAuth flow
-    } catch (error) {
-      console.error('Error signing in with Facebook:', error);
-    }
-  }
+  // async signInWithFB(): Promise<void> {
+  //   try {
+  //     await this.supabaseService.signInWithFacebook();
+  //     // Redirect will happen automatically via OAuth flow
+  //   } catch (error) {
+  //     console.error('Error signing in with Facebook:', error);
+  //   }
+  // }
 }

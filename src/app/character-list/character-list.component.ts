@@ -1,34 +1,33 @@
 import { Component, OnInit } from '@angular/core';
 import { Character } from "../../assets/models";
 import { initializeSpellSlots } from "../../assets/functions";
-import { SocialAuthService, SocialUser } from '@abacritt/angularx-social-login';
-import { faCloud, faMagicWandSparkles, faListCheck } from '@fortawesome/free-solid-svg-icons';
+import { SupabaseService } from '../services/supabase.service';
+import { Router } from '@angular/router';
+import { User } from '@supabase/supabase-js';
 
 @Component({
   selector: 'app-character-list',
+  standalone: false,
   templateUrl: './character-list.component.html',
   styleUrls: ['./character-list.component.scss']
 })
 export class CharacterListComponent implements OnInit {
-  // Font Awesome icons
-  faCloud = faCloud;
-  faMagicWandSparkles = faMagicWandSparkles;
-  faListCheck = faListCheck;
   
   characters: Character[] = [];
   selectedCharacter: Character | undefined;
   selectedCharacterID: string = '';
   editCharacterObj: Character | undefined;
-  user: SocialUser | null = null;
+  user: User | null = null;
   
-  constructor(private authService: SocialAuthService) { }
+  constructor(
+    private supabaseService: SupabaseService,
+    private router: Router
+    ) { }
 
   ngOnInit() {
-    this.authService.authState.subscribe(user => {
+    this.supabaseService.authState.subscribe(user => {
       this.user = user;
-      if (user) {
-        this.loadCharacters();
-      }
+      this.loadCharacters();
     });
   }
 

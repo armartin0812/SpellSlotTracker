@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkSpellSlotTracker=self.webpackChunkSpellSlotTracker||[]).push([[806],{806:e=>{e.exports=function(){throw new Error("ws does not work in the browser. Browser clients must use the native WebSocket object")}}}]);
