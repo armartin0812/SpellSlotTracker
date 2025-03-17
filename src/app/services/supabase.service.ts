@@ -40,16 +40,16 @@ export class SupabaseService {
     if (error) throw error;
   }
 
-  async signInWithFacebook() {
-    const { error } = await this.supabase.auth.signInWithOAuth({
-      provider: 'facebook',
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`
-      }
-    });
+  // async signInWithFacebook() {
+  //   const { error } = await this.supabase.auth.signInWithOAuth({
+  //     provider: 'facebook',
+  //     options: {
+  //       redirectTo: `${window.location.origin}/auth/callback`
+  //     }
+  //   });
     
-    if (error) throw error;
-  }
+  //   if (error) throw error;
+  // }
 
   async signOut() {
     const { error } = await this.supabase.auth.signOut();
