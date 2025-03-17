@@ -15,7 +15,7 @@ export class SupabaseService {
   constructor(private router: Router) {
     this.supabase = createClient(
       environment.supabase_url,
-      environment.subabase_key
+      environment.supabase_key
     );
 
     // Check for existing session

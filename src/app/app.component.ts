@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { SocialAuthService, SocialUser } from "@abacritt/angularx-social-login";
+import { SupabaseService } from './services/supabase.service';
+import { User } from '@supabase/supabase-js';
 
 @Component({
   selector: 'app-root',
@@ -10,16 +11,16 @@ import { SocialAuthService, SocialUser } from "@abacritt/angularx-social-login";
 })
 export class AppComponent implements OnInit {
   title = 'Spell Slot Tracker';
-  user: SocialUser | undefined;
+  user: User | null = null;
   loggedIn: boolean = false;
 
   constructor(
-    private authService: SocialAuthService,
+    private supabaseService: SupabaseService,
     private router: Router
   ) { }
 
   ngOnInit() {
-    this.authService.authState.subscribe((user) => {
+    this.supabaseService.authState.subscribe((user) => {
       this.user = user;
       this.loggedIn = (user != null);
       
@@ -30,8 +31,6 @@ export class AppComponent implements OnInit {
   }
 
   signOut(): void {
-    this.authService.signOut().then(() => {
-      this.router.navigate(['/login']);
-    });
+    this.supabaseService.signOut();
   }
 }
