@@ -63,14 +63,25 @@ export class SupabaseService {
   }
 
   async signInWithGoogle() {
-    const { error } = await this.supabase.auth.signInWithOAuth({
+    console.log('Initiating Google sign-in');
+    console.log('Redirect URL:', `${window.location.origin}/auth/callback`);
+    
+    const { data, error } = await this.supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`
+        redirectTo: `${window.location.origin}/auth/callback`,
+        queryParams: {
+          prompt: 'select_account' // Force Google to show the account selector
+        }
       }
     });
     
-    if (error) throw error;
+    console.log('Sign-in initiated:', data);
+    
+    if (error) {
+      console.error('Error initiating sign-in:', error);
+      throw error;
+    }
   }
 
   // async signInWithFacebook() {
@@ -92,6 +103,36 @@ export class SupabaseService {
 
   async handleAuthCallback(): Promise<void> {
     console.log('Handling auth callback');
+    
+    // First, try to extract the hash fragment from the URL
+    const hashFragment = window.location.hash;
+    console.log('Hash fragment:', hashFragment);
+    
+    if (hashFragment && hashFragment.length > 0) {
+      try {
+        // Process the hash fragment manually if needed
+        console.log('Processing hash fragment');
+        
+        // The Supabase client should handle this automatically,
+        // but we'll explicitly call getSession to ensure it's processed
+        const { data, error } = await this.supabase.auth.getSession();
+        
+        if (error) {
+          console.error('Error getting session after processing hash:', error);
+          throw error;
+        }
+        
+        if (data?.session) {
+          console.log('Session found after processing hash:', data.session.user);
+          this.userSubject.next(data.session.user);
+          return;
+        }
+      } catch (err) {
+        console.error('Error processing hash fragment:', err);
+      }
+    }
+    
+    // If we didn't get a session from the hash, try getting it directly
     const { data, error } = await this.supabase.auth.getSession();
     
     if (error) {
@@ -104,6 +145,28 @@ export class SupabaseService {
       this.userSubject.next(data.session.user);
     } else {
       console.log('No session found');
+      
+      // As a last resort, try to exchange the code for a session
+      // This is needed for some OAuth providers
+      const params = new URLSearchParams(window.location.search);
+      const code = params.get('code');
+      
+      if (code) {
+        console.log('Found code in URL, attempting to exchange for session');
+        try {
+          // This is handled automatically by Supabase, but we'll try to force it
+          await this.supabase.auth.exchangeCodeForSession(code);
+          
+          // Check if we have a session now
+          const { data: sessionData } = await this.supabase.auth.getSession();
+          if (sessionData?.session) {
+            console.log('Session obtained after code exchange:', sessionData.session.user);
+            this.userSubject.next(sessionData.session.user);
+          }
+        } catch (err) {
+          console.error('Error exchanging code for session:', err);
+        }
+      }
     }
   }
 
