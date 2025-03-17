@@ -13,6 +13,7 @@ const routes: Routes = [
     component: CharacterListComponent,
     canActivate: [AuthGuard]
   },
+  // The callback route should NOT have the AuthGuard
   { path: 'auth/callback', component: CallbackComponent }
 ];
 

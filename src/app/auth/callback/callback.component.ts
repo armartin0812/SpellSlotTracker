@@ -8,13 +8,18 @@ import { SupabaseService } from '../../services/supabase.service';
   templateUrl: './callback.component.html'
 })
 export class CallbackComponent implements OnInit {
+  loading = true;
+  error: string | null = null;
+  
   constructor(
     private supabaseService: SupabaseService,
     private router: Router
-  ) {}
+  ) {
+    console.log('Callback component constructor called');
+  }
 
   ngOnInit() {
-    console.log('Callback component initialized');
+    console.log('Callback component ngOnInit called');
     console.log('URL:', window.location.href);
     
     // Check if we have a code or access_token in the URL
@@ -26,6 +31,16 @@ export class CallbackComponent implements OnInit {
     
     console.log('Has code:', hasCode);
     console.log('Has token:', hasToken);
+    
+    // If manually navigated with no auth params, redirect to login
+    if (!hasCode && !hasToken) {
+      console.log('No auth parameters found - likely direct navigation to callback URL');
+      this.error = 'Invalid authentication callback. Redirecting to login...';
+      setTimeout(() => {
+        this.router.navigate(['/login']);
+      }, 3000);
+      return;
+    }
     
     // Actively process the OAuth callback
     this.supabaseService.handleAuthCallback().then(() => {
@@ -47,17 +62,28 @@ export class CallbackComponent implements OnInit {
               this.router.navigate(['/characters']);
             } else {
               console.log('Still no user after retry, navigating to login');
-              this.router.navigate(['/login']);
+              this.error = 'Authentication failed. Redirecting to login...';
+              setTimeout(() => {
+                this.router.navigate(['/login']);
+              }, 2000);
             }
           }, 2000); // Wait 2 seconds and try again
         } else {
           console.log('No user found, navigating to login');
-          this.router.navigate(['/login']);
+          this.error = 'No user found. Redirecting to login...';
+          setTimeout(() => {
+            this.router.navigate(['/login']);
+          }, 2000);
         }
       }
     }).catch(error => {
       console.error('Error handling auth callback:', error);
-      this.router.navigate(['/login']);
+      this.error = 'Error during authentication. Redirecting to login...';
+      setTimeout(() => {
+        this.router.navigate(['/login']);
+      }, 2000);
+    }).finally(() => {
+      this.loading = false;
     });
   }
 }
