@@ -76,6 +76,7 @@ export function initializeSpellSlots(character: Character) {
 }
 
 export function longRest(character: Character) {
+  // Reset standard spell slots
   if (character.spells !== undefined) {
     character.spells.forEach((s) => {
       s.slots = [];
@@ -89,6 +90,7 @@ export function longRest(character: Character) {
       }
     });
   }
+  // Reset all custom trackers (regardless of recoverable status)
   if (character.slots !== undefined) {
     character.slots.forEach((s) => {
       s.slots = [];

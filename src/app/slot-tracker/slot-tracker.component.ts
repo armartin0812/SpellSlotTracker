@@ -22,6 +22,8 @@ export class SlotTrackerComponent {
   }
 
   recover() {
-    if (this.slot.slotUsed) this.slot.slotUsed = false;
+    if (this.allowRecovery && this.slot.slotUsed) {
+      this.slot.slotUsed = false;
+    }
   }
 }

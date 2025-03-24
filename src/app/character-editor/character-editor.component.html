@@ -121,6 +121,7 @@
           type="text"
           style="width: 40px;"
           [(ngModel)]="s.lvlAbrev"
+          (change)="validateAbrev(s)"
           title="Abbreviation to use for displaying the individual slots"
         />
         <input
@@ -150,6 +151,13 @@
         >
           +
         </button>
+      </div>
+    </div>
+    <div class="row" *ngIf="abrevError">
+      <div class="col">
+        <div class="alert alert-danger">
+          {{ abrevError }}
+        </div>
       </div>
     </div>
     <br/>
