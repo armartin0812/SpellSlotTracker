@@ -221,6 +221,8 @@ export class SupabaseService {
           current_hp: character.currentHP,
           max_hp: character.maxHP,
           concentrating: character.concentrating
+        }, {
+          onConflict: 'user_id,character_id'  // Specify the fields that make up your unique constraint
         })
         .select()
         .single();
