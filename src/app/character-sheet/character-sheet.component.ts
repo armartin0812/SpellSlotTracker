@@ -66,7 +66,22 @@ export class CharacterSheetComponent implements OnChanges {
     }
   }
 
-  subtract10() {
+  // Helper method to save character properties
+  private async saveCharacterProperties() {
+    try {
+      await this.supabaseService.updateCharacterProperties(
+        this.character.characterID, 
+        {
+          currentHP: this.character.currentHP,
+          concentrating: this.character.concentrating
+        }
+      );
+    } catch (error) {
+      console.error('Error saving character properties:', error);
+    }
+  }
+
+  async subtract10() {
     var hp = this.character.currentHP - 10;
     if (hp <= 0) {
       this.character.currentHP = 0;
@@ -75,9 +90,12 @@ export class CharacterSheetComponent implements OnChanges {
     else {
       this.character.currentHP = hp;
     }
+    
+    // Save the HP change
+    await this.saveCharacterProperties();
   }
 
-  add10() {
+  async add10() {
     var hp = this.character.currentHP + 10;
     if (hp >= this.character.maxHP) {
       this.character.currentHP = this.character.maxHP;
@@ -85,9 +103,12 @@ export class CharacterSheetComponent implements OnChanges {
     else {
       this.character.currentHP = hp;
     }
+    
+    // Save the HP change
+    await this.saveCharacterProperties();
   }
 
-  subtract5() {
+  async subtract5() {
     var hp = this.character.currentHP - 5;
     if (hp <= 0) {
       this.character.currentHP = 0;
@@ -96,9 +117,12 @@ export class CharacterSheetComponent implements OnChanges {
     else {
       this.character.currentHP = hp;
     }
+    
+    // Save the HP change
+    await this.saveCharacterProperties();
   }
 
-  add5() {
+  async add5() {
     var hp = this.character.currentHP + 5;
     if (hp >= this.character.maxHP) {
       this.character.currentHP = this.character.maxHP;
@@ -106,9 +130,12 @@ export class CharacterSheetComponent implements OnChanges {
     else {
       this.character.currentHP = hp;
     }
+    
+    // Save the HP change
+    await this.saveCharacterProperties();
   }
 
-  subtract1() {    
+  async subtract1() {    
     var hp = this.character.currentHP - 1;
     if (hp <= 0) {
       this.character.currentHP = 0;
@@ -117,9 +144,12 @@ export class CharacterSheetComponent implements OnChanges {
     else {
       this.character.currentHP = hp;
     }
+    
+    // Save the HP change
+    await this.saveCharacterProperties();
   }
 
-  add1() {
+  async add1() {
     var hp = this.character.currentHP + 1;
     if (hp >= this.character.maxHP) {
       this.character.currentHP = this.character.maxHP;
@@ -127,6 +157,9 @@ export class CharacterSheetComponent implements OnChanges {
     else {
       this.character.currentHP = hp;
     }
+    
+    // Save the HP change
+    await this.saveCharacterProperties();
   }
 
   resetDeathSaves() {
@@ -139,7 +172,19 @@ export class CharacterSheetComponent implements OnChanges {
     this.character.concentrating = false;
   }
 
-  addEffect(event: MatChipInputEvent) {
+  // Helper method to save status effects
+  private async saveStatusEffects() {
+    try {
+      await this.supabaseService.updateStatusEffects(
+        this.character.characterID,
+        this.character.statusEffects
+      );
+    } catch (error) {
+      console.error('Error saving status effects:', error);
+    }
+  }
+
+  async addEffect(event: MatChipInputEvent) {
     var value = (event.value || '').trim();
 
     if (!this.character.statusEffects){
@@ -148,17 +193,20 @@ export class CharacterSheetComponent implements OnChanges {
 
     if (value) {
       this.character.statusEffects.push({effect: value});
+      
+      // Save the updated status effects
+      await this.saveStatusEffects();
     }
     
     event.chipInput!.clear();
   }
 
-  editEffect(e: StatusEffect, event: MatChipEditedEvent) {
+  async editEffect(e: StatusEffect, event: MatChipEditedEvent) {
     var value = event.value.trim();
 
     // Remove if it no longer has a value
     if (!value) {
-      this.removeEffect(e);
+      await this.removeEffect(e);
       return;
     }
 
@@ -166,14 +214,25 @@ export class CharacterSheetComponent implements OnChanges {
     var i = this.character.statusEffects.indexOf(e);
     if (i >= 0) {
       this.character.statusEffects[i].effect = value;
+      
+      // Save the updated status effects
+      await this.saveStatusEffects();
     }
   }
 
-  removeEffect(fruit: StatusEffect): void {
+  async removeEffect(fruit: StatusEffect): void {
     var i = this.character.statusEffects.indexOf(fruit);
 
     if (i >= 0) {
       this.character.statusEffects.splice(i, 1);
+      
+      // Save the updated status effects
+      await this.saveStatusEffects();
     }
+  }
+
+  // Method to handle concentration changes
+  async onConcentrationChange() {
+    await this.saveCharacterProperties();
   }
 }

@@ -1,5 +1,6 @@
 import { Component, Input } from "@angular/core";
 import { SpellSlot } from "src/assets/models";
+import { SupabaseService } from "../services/supabase.service";
 
 @Component({
   selector: "slot-tracker",
@@ -10,9 +11,30 @@ import { SpellSlot } from "src/assets/models";
 export class SlotTrackerComponent {
   @Input() slot: SpellSlot = new SpellSlot;
   @Input() allowRecovery: boolean = true;
+  @Input() characterId: string = '';
+  @Input() spellLevel: number = 0;
+  @Input() slotIndex: number = 0;
+  @Input() isCustom: boolean = false;
 
-  expendSpell() {
+  constructor(private supabaseService: SupabaseService) { }
+
+  async expendSpell() {
     this.slot.slotUsed = true;
+    
+    // Save the change to Supabase if we have the necessary info
+    if (this.characterId && this.spellLevel !== undefined) {
+      try {
+        await this.supabaseService.updateSpellSlot(
+          this.characterId,
+          this.spellLevel,
+          this.slotIndex,
+          true,
+          this.isCustom
+        );
+      } catch (error) {
+        console.error('Error updating spell slot:', error);
+      }
+    }
   }
 
   getBackgroundGradiant(spellLevel: number): string {
@@ -21,9 +43,24 @@ export class SlotTrackerComponent {
     return "rgba(0, 0, 0, " + x.toString() + ")";
   }
 
-  recover() {
+  async recover() {
     if (this.allowRecovery && this.slot.slotUsed) {
       this.slot.slotUsed = false;
+      
+      // Save the change to Supabase if we have the necessary info
+      if (this.characterId && this.spellLevel !== undefined) {
+        try {
+          await this.supabaseService.updateSpellSlot(
+            this.characterId,
+            this.spellLevel,
+            this.slotIndex,
+            false,
+            this.isCustom
+          );
+        } catch (error) {
+          console.error('Error updating spell slot:', error);
+        }
+      }
     }
   }
 }

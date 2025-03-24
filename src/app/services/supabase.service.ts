@@ -517,6 +517,128 @@ export class SupabaseService {
     return character;
   }
 
+  // Update character properties (HP, concentration)
+  async updateCharacterProperties(characterId: string, properties: Partial<{
+    currentHP: number;
+    concentrating: boolean;
+  }>): Promise<boolean> {
+    const user = this.getUser();
+    if (!user) return false;
+
+    try {
+      // Find the database ID for this character
+      const { data: charData, error: findError } = await this.supabase
+        .from('characters')
+        .select('id')
+        .eq('character_id', characterId)
+        .eq('user_id', user.id)
+        .single();
+
+      if (findError) throw findError;
+
+      // Update only the specified properties
+      const updateData: any = {};
+      if (properties.currentHP !== undefined) updateData.current_hp = properties.currentHP;
+      if (properties.concentrating !== undefined) updateData.concentrating = properties.concentrating;
+
+      if (Object.keys(updateData).length > 0) {
+        const { error: updateError } = await this.supabase
+          .from('characters')
+          .update(updateData)
+          .eq('id', charData.id);
+
+        if (updateError) throw updateError;
+      }
+
+      return true;
+    } catch (error) {
+      console.error('Error updating character properties:', error);
+      throw error;
+    }
+  }
+
+  // Update a single spell slot
+  async updateSpellSlot(characterId: string, spellLevel: number, slotIndex: number, isUsed: boolean, isCustom: boolean = false): Promise<boolean> {
+    const user = this.getUser();
+    if (!user) return false;
+
+    try {
+      // Find the database ID for this character
+      const { data: charData, error: findError } = await this.supabase
+        .from('characters')
+        .select('id')
+        .eq('character_id', characterId)
+        .eq('user_id', user.id)
+        .single();
+
+      if (findError) throw findError;
+
+      // Find the spell level
+      const { data: levelData, error: levelError } = await this.supabase
+        .from('spell_levels')
+        .select('id')
+        .eq('character_id', charData.id)
+        .eq('spell_level', spellLevel)
+        .eq('is_custom', isCustom)
+        .single();
+
+      if (levelError) throw levelError;
+
+      // Get all slots for this spell level
+      const { data: slotsData, error: slotsError } = await this.supabase
+        .from('spell_slots')
+        .select('id')
+        .eq('spell_level_id', levelData.id)
+        .order('id', { ascending: true });
+
+      if (slotsError) throw slotsError;
+
+      // Make sure the slot index is valid
+      if (slotIndex < 0 || slotIndex >= slotsData.length) {
+        throw new Error(`Invalid slot index: ${slotIndex}`);
+      }
+
+      // Update the specific slot
+      const { error: updateError } = await this.supabase
+        .from('spell_slots')
+        .update({ slot_used: isUsed })
+        .eq('id', slotsData[slotIndex].id);
+
+      if (updateError) throw updateError;
+
+      return true;
+    } catch (error) {
+      console.error('Error updating spell slot:', error);
+      throw error;
+    }
+  }
+
+  // Update status effects
+  async updateStatusEffects(characterId: string, statusEffects: StatusEffect[]): Promise<boolean> {
+    const user = this.getUser();
+    if (!user) return false;
+
+    try {
+      // Find the database ID for this character
+      const { data: charData, error: findError } = await this.supabase
+        .from('characters')
+        .select('id')
+        .eq('character_id', characterId)
+        .eq('user_id', user.id)
+        .single();
+
+      if (findError) throw findError;
+
+      // Save the status effects
+      await this.saveStatusEffects(charData.id, statusEffects);
+      
+      return true;
+    } catch (error) {
+      console.error('Error updating status effects:', error);
+      throw error;
+    }
+  }
+
   // Set up real-time subscription for a user's characters
   setupCharacterSubscription(callback: (payload: any) => void): { subscription: RealtimeChannel, unsubscribe: () => void } {
     const user = this.getUser();
