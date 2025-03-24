@@ -339,7 +339,9 @@ export class SupabaseService {
           .from('spell_levels')
           .update({
             lvl_abrev: spellLevel.lvlAbrev,
-            max_slots: spellLevel.maxSlots
+            max_slots: spellLevel.maxSlots,
+            lvl_name: spellLevel.lvlName,
+            is_recoverable: spellLevel.recoverable
           })
           .eq('id', dbSpellLevel.id);
         
@@ -353,7 +355,9 @@ export class SupabaseService {
             spell_level: spellLevel.spellLevel,
             lvl_abrev: spellLevel.lvlAbrev,
             max_slots: spellLevel.maxSlots,
-            is_custom: isCustom
+            is_custom: isCustom,
+            lvl_name: spellLevel.lvlName,
+            is_recoverable: spellLevel.recoverable
           })
           .select()
           .single();
@@ -460,6 +464,8 @@ export class SupabaseService {
         spellLevel.spellLevel = dbLevel.spell_level;
         spellLevel.lvlAbrev = dbLevel.lvl_abrev;
         spellLevel.maxSlots = dbLevel.max_slots;
+        spellLevel.lvlName = dbLevel.lvl_name;
+        spellLevel.recoverable = dbLevel.is_recoverable;
         
         // Map slots
         spellLevel.slots = [];
