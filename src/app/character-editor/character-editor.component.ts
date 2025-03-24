@@ -27,10 +27,19 @@ export class CharacterEditorComponent {
   }
 
   addCustom() {
-    var slot = new SpellLevel();
-    slot.spellLevel = 0;
-    slot.lvlName = '';
+    // Find the lowest (most negative) spell_level value among existing custom trackers
+    let minLevel = -1;
+    if (this.character.slots && this.character.slots.length > 0) {
+      minLevel = Math.min(...this.character.slots.map(s => s.spellLevel));
+      // If minLevel is already negative, decrement it further
+      if (minLevel < 0) {
+        minLevel = minLevel - 1;
+      }
+    }
     
+    var slot = new SpellLevel();
+    slot.spellLevel = minLevel; // Use a negative value
+    slot.lvlName = '';
     slot.lvlAbrev = '';
     slot.slots = [];
     slot.recoverable = true; // Set default to true

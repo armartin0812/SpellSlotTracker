@@ -313,63 +313,63 @@ export class SupabaseService {
 
   // Helper methods for saving related data
   private async saveSpellLevels(characterDbId: string, spellLevels: SpellLevel[], isCustom: boolean): Promise<void> {
-    // First, get existing spell levels for this character
-    const { data: existingLevels, error: fetchError } = await this.supabase
+    if (spellLevels.length === 0) {
+      // If there are no spell levels to save, delete any existing ones
+      const { error: deleteError } = await this.supabase
+        .from('spell_levels')
+        .delete()
+        .eq('character_id', characterDbId)
+        .eq('is_custom', isCustom);
+      
+      if (deleteError) throw deleteError;
+      return;
+    }
+
+    // Prepare data for upsert
+    const spellLevelsToUpsert = spellLevels.map(spellLevel => ({
+      character_id: characterDbId,
+      spell_level: spellLevel.spellLevel,
+      lvl_abrev: spellLevel.lvlAbrev,
+      max_slots: spellLevel.maxSlots,
+      is_custom: isCustom,
+      lvl_name: spellLevel.lvlName,
+      is_recoverable: spellLevel.recoverable
+    }));
+
+    // Upsert all spell levels at once
+    const { data: upsertedLevels, error: upsertError } = await this.supabase
       .from('spell_levels')
-      .select('*')
-      .eq('character_id', characterDbId)
-      .eq('is_custom', isCustom);
+      .upsert(spellLevelsToUpsert, {
+        onConflict: 'character_id,spell_level,is_custom'
+      })
+      .select();
 
-    if (fetchError) throw fetchError;
+    if (upsertError) throw upsertError;
 
-    // Create a map of existing levels by spell_level
-    const existingMap = new Map();
-    existingLevels.forEach(level => {
-      existingMap.set(level.spell_level, level);
-    });
+    // Clean up any orphaned spell levels
+    const savedLevels = spellLevels.map(s => s.spellLevel);
+    
+    if (savedLevels.length > 0) {
+      const { error: deleteOrphanedError } = await this.supabase
+        .from('spell_levels')
+        .delete()
+        .eq('character_id', characterDbId)
+        .eq('is_custom', isCustom)
+        .not('spell_level', 'in', `(${savedLevels.join(',')})`);
+      
+      if (deleteOrphanedError) throw deleteOrphanedError;
+    }
 
-    // Process each spell level
+    // Now handle the slots for each level
     for (const spellLevel of spellLevels) {
-      let dbSpellLevel;
+      // Find the corresponding upserted level
+      const dbSpellLevel = upsertedLevels.find(
+        level => level.spell_level === spellLevel.spellLevel && level.is_custom === isCustom
+      );
       
-      // Check if this level already exists
-      if (existingMap.has(spellLevel.spellLevel)) {
-        dbSpellLevel = existingMap.get(spellLevel.spellLevel);
-        
-        // Update the existing spell level
-        const { error: updateError } = await this.supabase
-          .from('spell_levels')
-          .update({
-            lvl_abrev: spellLevel.lvlAbrev,
-            max_slots: spellLevel.maxSlots,
-            lvl_name: spellLevel.lvlName,
-            is_recoverable: spellLevel.recoverable
-          })
-          .eq('id', dbSpellLevel.id);
-        
-        if (updateError) throw updateError;
-      } else {
-        // Create a new spell level
-        const { data: newLevel, error: insertError } = await this.supabase
-          .from('spell_levels')
-          .insert({
-            character_id: characterDbId,
-            spell_level: spellLevel.spellLevel,
-            lvl_abrev: spellLevel.lvlAbrev,
-            max_slots: spellLevel.maxSlots,
-            is_custom: isCustom,
-            lvl_name: spellLevel.lvlName,
-            is_recoverable: spellLevel.recoverable
-          })
-          .select()
-          .single();
-        
-        if (insertError) throw insertError;
-        dbSpellLevel = newLevel;
+      if (dbSpellLevel) {
+        await this.saveSpellSlots(dbSpellLevel.id, spellLevel.slots);
       }
-      
-      // Now handle the slots for this level
-      await this.saveSpellSlots(dbSpellLevel.id, spellLevel.slots);
     }
   }
 
