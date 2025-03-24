@@ -313,16 +313,44 @@ export class SupabaseService {
 
   // Helper methods for saving related data
   private async saveSpellLevels(characterDbId: string, spellLevels: SpellLevel[], isCustom: boolean): Promise<void> {
+    // Get existing spell levels first
+    const { data: existingLevels, error: fetchError } = await this.supabase
+      .from('spell_levels')
+      .select('id, spell_level')
+      .eq('character_id', characterDbId)
+      .eq('is_custom', isCustom);
+
+    if (fetchError) throw fetchError;
+
+    // If there are no spell levels to save, delete all existing ones
     if (spellLevels.length === 0) {
-      // If there are no spell levels to save, delete any existing ones
+      if (existingLevels && existingLevels.length > 0) {
+        const { error: deleteError } = await this.supabase
+          .from('spell_levels')
+          .delete()
+          .eq('character_id', characterDbId)
+          .eq('is_custom', isCustom);
+        
+        if (deleteError) throw deleteError;
+      }
+      return;
+    }
+
+    // Identify levels to keep and levels to delete
+    const newLevelValues = spellLevels.map(s => s.spellLevel);
+    const levelsToDelete = existingLevels
+      ? existingLevels.filter(level => !newLevelValues.includes(level.spell_level))
+      : [];
+
+    // Delete levels that are no longer needed
+    if (levelsToDelete.length > 0) {
+      const levelIdsToDelete = levelsToDelete.map(level => level.id);
       const { error: deleteError } = await this.supabase
         .from('spell_levels')
         .delete()
-        .eq('character_id', characterDbId)
-        .eq('is_custom', isCustom);
+        .in('id', levelIdsToDelete);
       
       if (deleteError) throw deleteError;
-      return;
     }
 
     // Prepare data for upsert
@@ -345,20 +373,6 @@ export class SupabaseService {
       .select();
 
     if (upsertError) throw upsertError;
-
-    // Clean up any orphaned spell levels
-    const savedLevels = spellLevels.map(s => s.spellLevel);
-    
-    if (savedLevels.length > 0) {
-      const { error: deleteOrphanedError } = await this.supabase
-        .from('spell_levels')
-        .delete()
-        .eq('character_id', characterDbId)
-        .eq('is_custom', isCustom)
-        .not('spell_level', 'in', `(${savedLevels.join(',')})`);
-      
-      if (deleteOrphanedError) throw deleteOrphanedError;
-    }
 
     // Now handle the slots for each level
     for (const spellLevel of spellLevels) {
