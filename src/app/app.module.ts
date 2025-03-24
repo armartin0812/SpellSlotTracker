@@ -16,6 +16,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { environment } from '../environments/environment';
 import { AuthGuard } from './guards/auth.guard';
 import { CallbackComponent } from './auth/callback/callback.component';
@@ -32,7 +33,8 @@ import { SupabaseService } from './services/supabase.service';
     NgbModule,
     FontAwesomeModule,
     MatFormFieldModule,
-    MatChipsModule
+    MatChipsModule,
+    MatProgressSpinnerModule
   ],
   declarations: [
     AppComponent,

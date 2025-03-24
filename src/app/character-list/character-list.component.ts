@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Character } from "../../assets/models";
 import { initializeSpellSlots } from "../../assets/functions";
 import { SupabaseService } from '../services/supabase.service';
 import { Router } from '@angular/router';
 import { User } from '@supabase/supabase-js';
+import { RealtimeChannel } from '@supabase/supabase-js';
 
 @Component({
   selector: 'app-character-list',
@@ -11,38 +12,74 @@ import { User } from '@supabase/supabase-js';
   templateUrl: './character-list.component.html',
   styleUrls: ['./character-list.component.scss']
 })
-export class CharacterListComponent implements OnInit {
+export class CharacterListComponent implements OnInit, OnDestroy {
   
   characters: Character[] = [];
   selectedCharacter: Character | undefined;
   selectedCharacterID: string = '';
   editCharacterObj: Character | undefined;
   user: User | null = null;
+  isLoading: boolean = false;
+  error: string | null = null;
+  
+  private subscription: { subscription: RealtimeChannel, unsubscribe: () => void } | null = null;
   
   constructor(
     private supabaseService: SupabaseService,
     private router: Router
-    ) { }
+  ) { }
 
   ngOnInit() {
     this.supabaseService.authState.subscribe(user => {
       this.user = user;
-      this.loadCharacters();
+      if (user) {
+        this.loadCharacters();
+        this.setupRealtimeSubscription();
+      }
     });
   }
+  
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
+  
+  setupRealtimeSubscription() {
+    try {
+      this.subscription = this.supabaseService.setupCharacterSubscription((payload) => {
+        // Handle real-time updates
+        this.handleRealtimeUpdate(payload);
+      });
+    } catch (error) {
+      console.error('Error setting up real-time subscription:', error);
+    }
+  }
+  
+  handleRealtimeUpdate(payload: any) {
+    // Refresh the character list when changes occur
+    this.loadCharacters();
+  }
 
-  loadCharacters() {
+  async loadCharacters() {
     if (!this.user) return;
     
+    this.isLoading = true;
+    this.error = null;
+    
     try {
-      const key = `SpellSlotTracker-Characters-${this.user.id}`;
-      var store = localStorage.getItem(key);
-      if (store && store.length > 0) {
-        console.log("Characters Recovered!");
-        this.characters = JSON.parse(store);
+      this.characters = await this.supabaseService.getCharacters();
+      console.log("Characters loaded from Supabase:", this.characters.length);
+      
+      // If we had a selected character, try to reselect it
+      if (this.selectedCharacterID) {
+        this.chooseCharacter();
       }
-    } catch (e) {
-      console.log("No Local Storage found");
+    } catch (error) {
+      console.error("Error loading characters:", error);
+      this.error = "Failed to load characters. Please try again.";
+    } finally {
+      this.isLoading = false;
     }
   }
 
@@ -57,25 +94,52 @@ export class CharacterListComponent implements OnInit {
     this.editCharacterObj = c;
   }
 
-  saveCharacter(c: Character) {
-    if (c) {
-      var i = this.characters.map(x => x.characterID).indexOf(c.characterID);
-      if (i == -1)
-        this.characters.push(Object.assign(c));
-      this.updateLocalStorage();
+  async saveCharacter(c: Character) {
+    if (!c) {
+      this.editCharacterObj = undefined;
+      return;
     }
-    this.editCharacterObj = undefined;
+    
+    this.isLoading = true;
+    this.error = null;
+    
+    try {
+      const savedCharacter = await this.supabaseService.saveCharacter(c);
+      if (savedCharacter) {
+        // Update will happen via loadCharacters() triggered by real-time subscription
+        await this.loadCharacters();
+      }
+    } catch (error) {
+      console.error("Error saving character:", error);
+      this.error = "Failed to save character. Please try again.";
+    } finally {
+      this.isLoading = false;
+      this.editCharacterObj = undefined;
+    }
   }
 
-  deleteCharacter(c: Character) {
-    if (
-      window.confirm("Are you sure you wish to delete " + c.characterName + "?")
-    ) {
-      var i = this.characters.indexOf(c);
-      this.characters.splice(i, 1);
-      this.editCharacterObj = undefined;
-      this.selectedCharacter = undefined;
-      this.updateLocalStorage();
+  async deleteCharacter(c: Character) {
+    if (window.confirm("Are you sure you wish to delete " + c.characterName + "?")) {
+      this.isLoading = true;
+      this.error = null;
+      
+      try {
+        const success = await this.supabaseService.deleteCharacter(c.characterID);
+        if (success) {
+          // Update will happen via loadCharacters() triggered by real-time subscription
+          await this.loadCharacters();
+          
+          if (this.selectedCharacter && this.selectedCharacter.characterID === c.characterID) {
+            this.selectedCharacter = undefined;
+            this.selectedCharacterID = '';
+          }
+        }
+      } catch (error) {
+        console.error("Error deleting character:", error);
+        this.error = "Failed to delete character. Please try again.";
+      } finally {
+        this.isLoading = false;
+      }
     }
   }
 
@@ -89,27 +153,13 @@ export class CharacterListComponent implements OnInit {
     }
   }
 
+  // These methods are now obsolete but kept for backward compatibility
+  // They will be called from the UI but won't do anything
   updateLocalStorage() {
-    if (!this.user) return;
-    
-    this.clearLocalStorage();
-    console.log("Characters Saved");
-    try {
-      const key = `SpellSlotTracker-Characters-${this.user.id}`;
-      localStorage.setItem(key, JSON.stringify(this.characters));
-    } catch (e) {
-      console.log("Local Storage save operation failed: " + e);
-    }
+    console.log("updateLocalStorage called - no action needed with Supabase");
   }
 
   clearLocalStorage() {
-    if (!this.user) return;
-    
-    try {
-      const key = `SpellSlotTracker-Characters-${this.user.id}`;
-      localStorage.removeItem(key);
-    } catch (e) {
-      console.log("Local Storage clear operation failed");
-    }
+    console.log("clearLocalStorage called - no action needed with Supabase");
   }
 }

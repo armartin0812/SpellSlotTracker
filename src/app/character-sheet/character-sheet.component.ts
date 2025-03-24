@@ -10,6 +10,7 @@ import { longRest, displayPlayerClass } from "../../assets/functions";
 import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import {MatChipEditedEvent, MatChipInputEvent} from '@angular/material/chips';
 import { PlayerClass } from "../../assets/models";
+import { SupabaseService } from '../services/supabase.service';
 
 @Component({
   selector: "character-sheet",
@@ -26,8 +27,12 @@ export class CharacterSheetComponent implements OnChanges {
   deathSaveFail1: boolean | undefined;
   deathSaveFail2: boolean | undefined;
   deathSaveFail3: boolean | undefined;
+  isLoading: boolean = false;
 
-  constructor(private _cdr: ChangeDetectorRef) {}
+  constructor(
+    private _cdr: ChangeDetectorRef,
+    private supabaseService: SupabaseService
+  ) {}
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['character']) {
@@ -40,10 +45,25 @@ export class CharacterSheetComponent implements OnChanges {
     return displayPlayerClass(c);
   }
 
-  longRest() {
-    longRest(this.character);
-    this.resetDeathSaves();
-    this._cdr.detectChanges();
+  async longRest() {
+    this.isLoading = true;
+    
+    try {
+      // Call Supabase to perform long rest
+      await this.supabaseService.performLongRest(this.character.characterID);
+      
+      // Update local character object
+      longRest(this.character);
+      this.resetDeathSaves();
+    } catch (error) {
+      console.error("Error performing long rest:", error);
+      // Still update the UI for better user experience
+      longRest(this.character);
+      this.resetDeathSaves();
+    } finally {
+      this.isLoading = false;
+      this._cdr.detectChanges();
+    }
   }
 
   subtract10() {

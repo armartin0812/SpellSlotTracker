@@ -1,10 +1,24 @@
 <ng-template #context_menu>
   <div class="example-menu" cdkMenu>
-    <button class="example-menu-item" cdkMenuItem (click)="clearLocalStorage()">
-      Clear Stored Characters
+    <button class="example-menu-item" cdkMenuItem (click)="loadCharacters()">
+      Refresh Characters
     </button>
   </div>
 </ng-template>
+
+<!-- Loading indicator -->
+<div *ngIf="isLoading" class="loading-overlay">
+  <div class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
+
+<!-- Error message -->
+<div *ngIf="error" class="alert alert-danger" role="alert">
+  {{ error }}
+  <button type="button" class="btn btn-sm btn-outline-danger" (click)="loadCharacters()">Try Again</button>
+</div>
+
 <div class="row" *ngIf="!editCharacterObj">
   <div class="col">
     Character:
