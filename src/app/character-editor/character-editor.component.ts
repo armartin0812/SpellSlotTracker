@@ -29,23 +29,9 @@ export class CharacterEditorComponent {
   addCustom() {
     var slot = new SpellLevel();
     slot.spellLevel = 0;
-    slot.lvlName = "Custom Tracker";
+    slot.lvlName = '';
     
-    // Generate a unique abbreviation
-    let baseAbrev = "CT";
-    let uniqueAbrev = baseAbrev;
-    let counter = 1;
-    
-    // Check if the abbreviation already exists in either spells or slots
-    while (
-      this.character.slots.some(s => s.lvlAbrev === uniqueAbrev) || 
-      this.character.spells.some(s => s.lvlAbrev === uniqueAbrev)
-    ) {
-      uniqueAbrev = `${baseAbrev}${counter}`;
-      counter++;
-    }
-    
-    slot.lvlAbrev = uniqueAbrev;
+    slot.lvlAbrev = '';
     slot.slots = [];
     slot.recoverable = true; // Set default to true
     this.character.slots.push(slot);
