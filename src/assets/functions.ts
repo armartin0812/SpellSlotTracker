@@ -110,7 +110,7 @@ export function longRest(character: Character) {
 }
 
 export function displayPlayerClass(c: any): string {
-    switch (c) {
+    switch (c.toString()) {
         case '1':
             return 'Barbarian';
         case '2':

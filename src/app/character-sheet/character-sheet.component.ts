@@ -36,7 +36,6 @@ export class CharacterSheetComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['character']) {
-      longRest(this.character);
       this._cdr.detectChanges();
     }
   }
@@ -220,7 +219,7 @@ export class CharacterSheetComponent implements OnChanges {
     }
   }
 
-  async removeEffect(fruit: StatusEffect): void {
+  async removeEffect(fruit: StatusEffect) {
     var i = this.character.statusEffects.indexOf(fruit);
 
     if (i >= 0) {

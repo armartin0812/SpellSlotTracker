@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { Character, SpellLevel } from "../../assets/models";
+import { Character, SpellLevel, SpellSlot } from "../../assets/models";
 
 @Component({
   selector: "character-editor",
@@ -18,7 +18,61 @@ export class CharacterEditorComponent {
   save() {
     // Validate before saving
     if (this.validateCustomTrackers()) {
+      this.ensureSpellSlots();
+
       this.onSave.emit(this.character);
+    }
+  }
+
+  private ensureSpellSlots(): void {
+    // Make sure all spell levels have the correct number of spell slots
+    if (this.character.spells) {
+      this.character.spells.forEach(spellLevel => {
+        // Check if slots array exists
+        if (!spellLevel.slots) {
+          spellLevel.slots = [];
+        }
+ 
+        // Calculate how many slots we need to add or remove
+        const difference = spellLevel.maxSlots - spellLevel.slots.length;
+ 
+        if (difference > 0) {
+          // Need to add more slots
+          for (let i = 0; i < difference; i++) {
+            const slot = new SpellSlot();
+            slot.spellLevel = spellLevel.spellLevel;
+            slot.slotAbrev = spellLevel.lvlAbrev;
+            slot.slotUsed = false;
+            spellLevel.slots.push(slot);
+          }
+        } else if (difference < 0) {
+          // Need to remove excess slots
+          spellLevel.slots.splice(spellLevel.maxSlots, Math.abs(difference));
+        }
+      });
+    }
+ 
+    // Do the same for custom slots if they exist
+    if (this.character.slots) {
+      this.character.slots.forEach(slotLevel => {
+        if (!slotLevel.slots) {
+          slotLevel.slots = [];
+        }
+ 
+        const difference = slotLevel.maxSlots - slotLevel.slots.length;
+ 
+        if (difference > 0) {
+          for (let i = 0; i < difference; i++) {
+            const slot = new SpellSlot();
+            slot.spellLevel = slotLevel.spellLevel;
+            slot.slotAbrev = slotLevel.lvlAbrev;
+            slot.slotUsed = false;
+            slotLevel.slots.push(slot);
+          }
+        } else if (difference < 0) {
+          slotLevel.slots.splice(slotLevel.maxSlots, Math.abs(difference));
+        }
+      });
     }
   }
 
