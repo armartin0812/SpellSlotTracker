@@ -114,20 +114,48 @@ export class SupabaseService {
     // Check if we're on the callback page with potential auth parameters
     if (fullUrl.includes('#/auth/callback')) {
       try {
-        // Use Supabase's getSessionFromUrl which can handle hash-based URLs
-        const { data, error } = await this.supabase.auth.getSessionFromUrl({
-          storeSession: true
-        });
+        // Use the current method for getting session from URL
+        // In newer versions, this is handled automatically by detectSessionInUrl
+        // We'll just check if we have a session after the redirect
+        const { data, error } = await this.supabase.auth.getSession();
         
         if (error) {
-          console.error('Error getting session from URL:', error);
+          console.error('Error getting session:', error);
           throw error;
         }
         
         if (data?.session) {
-          console.log('Session obtained from URL:', data.session.user);
+          console.log('Session obtained after redirect:', data.session.user);
           this.userSubject.next(data.session.user);
           return;
+        }
+        
+        // If we don't have a session yet, try to extract hash parameters
+        // This is a fallback for older versions or specific scenarios
+        const hashParams = new URLSearchParams(
+          fullUrl.substring(fullUrl.indexOf('#/auth/callback') + '#/auth/callback'.length)
+        );
+        
+        const accessToken = hashParams.get('access_token');
+        const refreshToken = hashParams.get('refresh_token');
+        
+        if (accessToken && refreshToken) {
+          console.log('Found tokens in URL, setting session manually');
+          const { data: sessionData, error: sessionError } = await this.supabase.auth.setSession({
+            access_token: accessToken,
+            refresh_token: refreshToken
+          });
+          
+          if (sessionError) {
+            console.error('Error setting session:', sessionError);
+            throw sessionError;
+          }
+          
+          if (sessionData?.user) {
+            console.log('Session set manually:', sessionData.user);
+            this.userSubject.next(sessionData.user);
+            return;
+          }
         }
       } catch (err) {
         console.error('Error processing auth callback URL:', err);
