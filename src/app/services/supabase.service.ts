@@ -133,7 +133,7 @@ export class SupabaseService {
         // If we don't have a session yet, try to extract hash parameters
         // This is a fallback for older versions or specific scenarios
         const hashParams = new URLSearchParams(
-          fullUrl.substring(fullUrl.indexOf('#/auth/callback') + '#/auth/callback'.length)
+          fullUrl.substring(fullUrl.indexOf('#/auth/callback') + '#/auth/callback'.length).replace('#','?')
         );
         
         const accessToken = hashParams.get('access_token');

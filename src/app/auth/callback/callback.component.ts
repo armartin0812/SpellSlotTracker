@@ -21,19 +21,20 @@ export class CallbackComponent implements OnInit {
   ngOnInit() {
     console.log('Callback component ngOnInit called');
     console.log('URL:', window.location.href);
-    
-    // Check if we have a code or access_token in the URL
-    const params = new URLSearchParams(window.location.search);
-    const hashParams = new URLSearchParams(window.location.hash.replace('#', '?'));
-    
-    const hasCode = params.has('code');
+            
+    // For hash-based routing with OAuth, we need to handle double hash format
+    const fullUrl = window.location.href;
+    const adjustedUrl = fullUrl.substring(fullUrl.indexOf('#/auth/callback') + '#/auth/callback'.length).replace('#','?')
+
+    console.log('Adjusted URL:', adjustedUrl)
+
+    const hashParams = new URLSearchParams(adjustedUrl);    
     const hasToken = hashParams.has('access_token');
-    
-    console.log('Has code:', hasCode);
+        
     console.log('Has token:', hasToken);
     
     // If manually navigated with no auth params, redirect to login
-    if (!hasCode && !hasToken) {
+    if (!hasToken) {
       console.log('No auth parameters found - likely direct navigation to callback URL');
       this.error = 'Invalid authentication callback. Redirecting to login...';
       setTimeout(() => {
@@ -53,7 +54,7 @@ export class CallbackComponent implements OnInit {
         this.router.navigate(['/characters']);
       } else {
         // If we have a code or token but no user, wait a bit and try again
-        if ((hasCode || hasToken) && !user) {
+        if (hasToken && !user) {
           console.log('Has auth parameters but no user, waiting and trying again...');
           setTimeout(() => {
             const retryUser = this.supabaseService.getUser();
