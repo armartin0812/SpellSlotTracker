@@ -67,7 +67,7 @@ export class SupabaseService {
     console.log('Initiating Google sign-in');
     
     // Make sure we're using the correct redirect URL format for hash-based routing
-    const baseUrl = window.location.origin.replace(window.location.hash, '');
+    const baseUrl = window.location.href.replace(window.location.hash, '');
     const redirectUrl = `${baseUrl}/#/auth/callback`;
     console.log('Redirect URL:', redirectUrl);
     
