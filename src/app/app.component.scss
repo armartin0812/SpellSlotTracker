@@ -20,3 +20,25 @@ div {
   font-size: 14px;
   margin-bottom: 5px;
 }
+
+/* Sticky footer styles */
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+router-outlet + * {
+  margin-top: auto;
+}
+
+.footer-sticky {
+  margin-top: auto;
+  padding-bottom: 20px;
+}
