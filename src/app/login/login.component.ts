@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SupabaseService } from '../services/supabase.service';
 import { faCloud, faMagicWandSparkles, faListCheck } from '@fortawesome/free-solid-svg-icons';
+import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 
 @Component({
   selector: 'app-login',
@@ -11,6 +12,7 @@ import { faCloud, faMagicWandSparkles, faListCheck } from '@fortawesome/free-sol
 })
 export class LoginComponent implements OnInit {
   // Font Awesome icons
+  faGoogle = faGoogle;
   faCloud = faCloud;
   faMagicWandSparkles = faMagicWandSparkles;
   faListCheck = faListCheck;

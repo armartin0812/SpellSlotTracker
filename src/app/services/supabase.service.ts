@@ -68,7 +68,7 @@ export class SupabaseService {
     
     // Make sure we're using the correct redirect URL format for hash-based routing
     const baseUrl = window.location.href.replace(window.location.hash, '');
-    const redirectUrl = `${baseUrl}/#/auth/callback`;
+    const redirectUrl = `${baseUrl}#/auth/callback`;
     console.log('Redirect URL:', redirectUrl);
     
     const { data, error } = await this.supabase.auth.signInWithOAuth({
