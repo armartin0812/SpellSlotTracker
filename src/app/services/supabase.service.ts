@@ -65,12 +65,12 @@ export class SupabaseService {
 
   async signInWithGoogle() {
     console.log('Initiating Google sign-in');
-    console.log('Redirect URL:', `${window.location.origin}/auth/callback`);
+    console.log('Redirect URL:', `${window.location.origin}/#/auth/callback`);
     
     const { data, error } = await this.supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: `${window.location.origin}/#/auth/callback`,
         queryParams: {
           prompt: 'select_account' // Force Google to show the account selector
         }
