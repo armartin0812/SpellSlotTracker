@@ -24,4 +24,18 @@
 
   <!-- Router outlet for the different views -->
   <router-outlet></router-outlet>
+  
+  <!-- Footer -->
+  <footer class="mt-5 pt-4 border-top">
+    <div class="row">
+      <div class="col-12 text-center">
+        <p>&copy; {{ currentYear }} Spell Slot Tracker. All rights reserved.</p>
+        <p>
+          <a href="https://github.com/yourusername/spell-slot-tracker" target="_blank" class="text-decoration-none">
+            <fa-icon [icon]="faGithub"></fa-icon> View on GitHub
+          </a>
+        </p>
+      </div>
+    </div>
+  </footer>
 </div>
